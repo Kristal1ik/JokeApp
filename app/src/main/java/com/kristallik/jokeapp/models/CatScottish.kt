@@ -5,6 +5,8 @@ import com.kristallik.jokeapp.interfaces.Cat
 
 class CatScottish(
     override val weight: Double,
-    override val age: Int,
+    override val age: Int
+) :
+    Cat {
     override val behaviorType: BehaviorTypes = BehaviorTypes.PASSIVE
-) : Cat {}
+}

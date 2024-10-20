@@ -5,8 +5,8 @@ import com.kristallik.jokeapp.interfaces.Dog
 
 class DogCorgi(
     override val weight: Double,
-    override val age: Int,
-    override val biteType: BiteTypes = BiteTypes.UNDERBITE
+    override val age: Int
 ) :
     Dog {
+    override val biteType: BiteTypes = BiteTypes.UNDERBITE
 }
