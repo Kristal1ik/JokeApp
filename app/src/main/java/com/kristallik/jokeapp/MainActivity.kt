@@ -1,20 +1,22 @@
 package com.kristallik.jokeapp
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import com.kristallik.jokeapp.data.JokeGenerator
+import com.kristallik.jokeapp.databinding.ActivityMainBinding
+import com.kristallik.jokeapp.recycler.JokeRecyclerAdapter
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityMainBinding
+    private val adapter = JokeRecyclerAdapter()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContentView(R.layout.activity_main)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        binding.recyclerview.adapter = adapter
+        val generator = JokeGenerator()
+        val data = generator.generateJokesData()
+        adapter.setNewData(data)
     }
 }
