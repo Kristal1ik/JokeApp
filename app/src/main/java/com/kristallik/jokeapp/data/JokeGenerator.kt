@@ -1,5 +1,7 @@
 package com.kristallik.jokeapp.data
 
+import kotlin.random.Random
+
 class JokeGenerator {
     private val questions = listOf(
         "What does Santa suffer from if he gets stuck in a chimney?",
@@ -23,8 +25,9 @@ class JokeGenerator {
 
     fun generateJokesData(): ArrayList<Joke> {
         val jokes = ArrayList<Joke>()
-        for (i in questions.indices) {
-            jokes.add(i, Joke("Pun", questions[i], answers[i]))
+        for (i in 0..<answers.size) {
+            val position = Random.nextInt(0, questions.size)
+            jokes.add(i, Joke(i, "Pun", questions[position], answers[position]))
         }
         return jokes
     }
