@@ -8,9 +8,8 @@ import com.kristallik.jokeapp.databinding.JokeItemBinding
 import com.kristallik.jokeapp.recycler.JokeViewHolder
 import com.kristallik.jokeapp.recycler.util.JokeItemCallback
 
-class JokeListAdapter(itemCallback: JokeItemCallback) :
-    ListAdapter<Joke, JokeViewHolder>(itemCallback) {
-
+class JokeListAdapter :
+    ListAdapter<Joke, JokeViewHolder>(JokeItemCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JokeViewHolder {
         val binding = JokeItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return JokeViewHolder(binding)
@@ -21,5 +20,4 @@ class JokeListAdapter(itemCallback: JokeItemCallback) :
     }
 
     override fun getItemCount(): Int = currentList.size
-
 }

@@ -6,12 +6,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.kristallik.jokeapp.data.JokeGenerator
 import com.kristallik.jokeapp.databinding.ActivityMainBinding
 import com.kristallik.jokeapp.recycler.adapters.JokeListAdapter
-import com.kristallik.jokeapp.recycler.util.JokeItemCallback
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private val itemCallback = JokeItemCallback()
-    private val adapter = JokeListAdapter(itemCallback)
+    private val adapter = JokeListAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,7 +22,6 @@ class MainActivity : AppCompatActivity() {
             val data = generator.generateJokesData()
             adapter.submitList(data)
         }
-
     }
 
     private fun createRecyclerViewList() {
