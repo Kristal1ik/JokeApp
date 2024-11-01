@@ -1,11 +1,14 @@
-package com.kristallik.jokeapp.recycler
+package com.kristallik.jokeapp.recycler.adapters
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.kristallik.jokeapp.data.Joke
 import com.kristallik.jokeapp.databinding.JokeItemBinding
+import com.kristallik.jokeapp.recycler.JokeViewHolder
+import com.kristallik.jokeapp.recycler.util.JokeDiffUtilCallback
 
 class JokeRecyclerAdapter : RecyclerView.Adapter<JokeViewHolder>() {
 
@@ -23,7 +26,10 @@ class JokeRecyclerAdapter : RecyclerView.Adapter<JokeViewHolder>() {
 
     @SuppressLint("NotifyDataSetChanged")
     fun setNewData(newData: ArrayList<Joke>) {
+        val diffUtilCallback = JokeDiffUtilCallback(jokesList, newData)
+        val calculateDiff = DiffUtil.calculateDiff(diffUtilCallback)
         jokesList = newData
-        notifyDataSetChanged()
+        println("adapter")
+        calculateDiff.dispatchUpdatesTo(this)
     }
 }
