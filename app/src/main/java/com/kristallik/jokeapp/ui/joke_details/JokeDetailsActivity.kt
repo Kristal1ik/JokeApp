@@ -1,4 +1,4 @@
-package com.kristallik.jokeapp.ui
+package com.kristallik.jokeapp.ui.joke_details
 
 import android.content.Context
 import android.content.Intent
@@ -6,12 +6,11 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.kristallik.jokeapp.data.Joke
-import com.kristallik.jokeapp.data.JokeGenerator
 import com.kristallik.jokeapp.databinding.ActivityJokeDetailsBinding
 
-class JokeDetailsActivity : AppCompatActivity() {
+class JokeDetailsActivity : AppCompatActivity(), JokeDetailsView {
     private lateinit var binding: ActivityJokeDetailsBinding
-    private val generator = JokeGenerator
+    private lateinit var presenter: JokeDetailsPresenter
     private var position: Int = -1
 
     companion object {
@@ -27,24 +26,16 @@ class JokeDetailsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityJokeDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        presenter = JokeDetailsPresenter(this)
         handleExtra()
     }
 
     private fun handleExtra() {
         position = intent.getIntExtra(CONST_JOKE_POSITION_EXTRA, 1)
-        if (position == -1) {
-            handleError(position)
-        } else {
-            val item = generator.jokes[position] as? Joke
-            if (item != null) {
-                setupJokeData(item)
-            } else {
-                handleError(position)
-            }
-        }
+        presenter.loadJokeDetails(position)
     }
 
-    private fun setupJokeData(joke: Joke) {
+    override fun showJokeInfo(joke: Joke) {
         with(binding) {
             category.text = joke.category
             question.text = joke.question
@@ -52,8 +43,8 @@ class JokeDetailsActivity : AppCompatActivity() {
         }
     }
 
-    private fun handleError(position: Int) {
-        Toast.makeText(this, "Invalid Joke data, $position", Toast.LENGTH_SHORT).show()
+    override fun showErrorAndCloseScreen(errorMessage: String) {
+        Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show()
         finish()  // Закрытие активности
     }
 }

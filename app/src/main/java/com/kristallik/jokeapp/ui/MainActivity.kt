@@ -1,12 +1,12 @@
 package com.kristallik.jokeapp.ui
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kristallik.jokeapp.data.JokeGenerator
 import com.kristallik.jokeapp.databinding.ActivityMainBinding
 import com.kristallik.jokeapp.recycler.adapters.JokeListAdapter
+import com.kristallik.jokeapp.ui.joke_details.JokeDetailsActivity
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
