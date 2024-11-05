@@ -7,11 +7,12 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.kristallik.jokeapp.data.Joke
 import com.kristallik.jokeapp.databinding.ActivityJokeDetailsBinding
+import com.kristallik.jokeapp.ui.joke_details.JokeDetailsView.Companion.VALUE_IF_ERROR
 
 class JokeDetailsActivity : AppCompatActivity(), JokeDetailsView {
     private lateinit var binding: ActivityJokeDetailsBinding
     private lateinit var presenter: JokeDetailsPresenter
-    private var position: Int = -1
+    private var position: Int = VALUE_IF_ERROR
 
     companion object {
         private const val CONST_JOKE_POSITION_EXTRA = "JOKE_POSITION"
