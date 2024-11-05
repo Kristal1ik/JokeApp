@@ -1,4 +1,5 @@
 package com.kristallik.jokeapp.ui.main
+
 import com.kristallik.jokeapp.data.Joke
 
 interface MainView {
