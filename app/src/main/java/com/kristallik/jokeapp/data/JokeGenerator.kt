@@ -2,7 +2,9 @@ package com.kristallik.jokeapp.data
 
 import kotlin.random.Random
 
-class JokeGenerator {
+// object, чтобы не создавался при каждом выхове новый экземпляр
+object JokeGenerator {
+    val jokes = ArrayList<Joke>()
     private val questions = listOf(
         "What does Santa suffer from if he gets stuck in a chimney?",
         "Why does a computer never feel hungry?",
@@ -24,7 +26,7 @@ class JokeGenerator {
     )
 
     fun generateJokesData(): ArrayList<Joke> {
-        val jokes = ArrayList<Joke>()
+        jokes.clear()
         for (i in 0..<answers.size) {
             val position = Random.nextInt(0, questions.size)
             jokes.add(i, Joke(i, "Pun", questions[position], answers[position]))
