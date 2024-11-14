@@ -5,4 +5,5 @@
     <string name="category">Category</string>
     <string name="answer">Answer: </string>
     <string name="question">"Question: "</string>
+    <string name="add_a_joke">Add a joke</string>
 </resources>
