@@ -20,6 +20,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.4" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -31,77 +32,78 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/category">
-    <LinearLayout
-        android:id="@+id/linearlayout"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:orientation="vertical">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="40dp"
-            android:layout_marginTop="50dp"
-            android:layout_marginEnd="40dp"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:text="@string/question"
-                android:textColor="@color/text"
-                android:textSize="20sp"
-                android:textStyle="bold">
-
-            </TextView>
-
-            <TextView
-                android:id="@+id/question"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:text="@string/hello"
-                android:textColor="@color/header"
-                android:textSize="20sp"
-                android:textStyle="bold">
-
-            </TextView>
-        </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/linearlayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="40dp"
-            android:layout_marginEnd="40dp"
-            android:layout_weight="7"
-            android:layout_marginBottom="50dp"
+            android:layout_height="0dp"
             android:orientation="vertical">
 
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:text="@string/answer"
-                android:textColor="@color/text"
-                android:textSize="20sp"
-                android:textStyle="bold">
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="78dp"
+                android:layout_marginEnd="40dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
 
-            </TextView>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:text="@string/question"
+                    android:textColor="@color/text"
+                    android:textSize="20sp"
+                    android:textStyle="bold">
 
-            <TextView
-                android:id="@+id/answer"
+                </TextView>
+
+                <TextView
+                    android:id="@+id/question"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:text="@string/hello"
+                    android:textColor="@color/header"
+                    android:textSize="20sp"
+                    android:textStyle="bold">
+
+                </TextView>
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:text="@string/hello"
-                android:textColor="@color/header"
-                android:textSize="20sp"
-                android:textStyle="bold">
+                android:layout_marginStart="40dp"
+                android:layout_marginEnd="40dp"
+                android:layout_marginBottom="50dp"
+                android:layout_weight="7"
+                android:orientation="vertical">
 
-            </TextView>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:text="@string/answer"
+                    android:textColor="@color/text"
+                    android:textSize="20sp"
+                    android:textStyle="bold">
+
+                </TextView>
+
+                <TextView
+                    android:id="@+id/answer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:text="@string/hello"
+                    android:textColor="@color/header"
+                    android:textSize="20sp"
+                    android:textStyle="bold">
+
+                </TextView>
+            </LinearLayout>
         </LinearLayout>
-
-    </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

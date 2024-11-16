@@ -2,7 +2,7 @@ package com.kristallik.jokeapp.data
 
 import kotlin.random.Random
 
-// object, чтобы не создавался при каждом выхове новый экземпляр
+// object, чтобы не создавался при каждом вызове новый экземпляр
 object JokeGenerator {
     val jokes = ArrayList<Joke>()
     private val questions = listOf(
@@ -29,7 +29,7 @@ object JokeGenerator {
         jokes.clear()
         for (i in 0..<answers.size) {
             val position = Random.nextInt(0, questions.size)
-            jokes.add(i, Joke(i, "Pun", questions[position], answers[position]))
+            jokes.add(Joke(i, "Pun", questions[position], answers[position]))
         }
         return jokes
     }
