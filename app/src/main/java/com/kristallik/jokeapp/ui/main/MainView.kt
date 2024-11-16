@@ -5,4 +5,5 @@ import com.kristallik.jokeapp.data.Joke
 interface MainView {
     fun showJokes(jokes: ArrayList<Joke>)
     fun showError(errorMessage: String)
+    fun addJoke()
 }

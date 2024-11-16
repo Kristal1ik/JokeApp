@@ -12,4 +12,7 @@ class MainPresenter(private val view: MainView) {
             view.showJokes(data)
         }
     }
+    fun onActionButtonClicked(){
+        view.addJoke()
+    }
 }

@@ -11,6 +11,7 @@ import com.kristallik.jokeapp.R
 import com.kristallik.jokeapp.data.Joke
 import com.kristallik.jokeapp.databinding.FragmentJokeListBinding
 import com.kristallik.jokeapp.recycler.adapters.JokeListAdapter
+import com.kristallik.jokeapp.ui.add_joke.fragment.AddJokeFragment
 import com.kristallik.jokeapp.ui.joke_details.JokeDetailsFragment
 import com.kristallik.jokeapp.ui.main.MainPresenter
 import com.kristallik.jokeapp.ui.main.MainView
@@ -21,7 +22,7 @@ class JokeListFragment : Fragment(), MainView {
     private val binding get() = _binding!!
     private lateinit var presenter: MainPresenter
 
-    private val adapter = JokeListAdapter { position ->
+    val adapter = JokeListAdapter { position ->
         val jokeDetailsFragment = JokeDetailsFragment.newInstance(position)
         parentFragmentManager.beginTransaction()
             .replace(
@@ -54,9 +55,11 @@ class JokeListFragment : Fragment(), MainView {
         savedInstanceState?.let {
             currentPosition = it.getInt(CONST_CURRENT_POSITION, 0)
         }
-
         presenter.loadJokes()
         binding.recyclerview.scrollToPosition(currentPosition)
+        binding.addActionButton.setOnClickListener {
+            presenter.onActionButtonClicked()
+        }
     }
 
     private fun createRecyclerViewList() {
@@ -80,6 +83,13 @@ class JokeListFragment : Fragment(), MainView {
 
     override fun showError(errorMessage: String) {
         Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun addJoke() {
+        val addJokeFragment = AddJokeFragment()
+        val transaction = parentFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, addJokeFragment).addToBackStack(null)
+        transaction.commit()
     }
 
     override fun onDestroyView() {
