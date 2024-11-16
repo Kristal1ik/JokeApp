@@ -6,4 +6,9 @@
     <string name="answer">Answer: </string>
     <string name="question">"Question: "</string>
     <string name="add_a_joke">Add a joke</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="new_joke">New joke</string>
+    <string name="answer_hint">Answer</string>
+    <string name="question_hint">Question</string>
+    <string name="save">Save</string>
 </resources>
