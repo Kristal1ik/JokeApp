@@ -6,16 +6,10 @@ class AddJokePresenter(private val view: AddJokeView) {
     fun loadCategories() {
         view.showCategories(categories)
     }
-//
-//    fun onCategorySelected(position: Int) {
-//        val selectedCategory = categories[position]
-//        view.showSelectedCategory(selectedCategory)
-//    }
 
-    fun onSaveButtonClicked(category: String, question: String, answer: String){
-        if (category != "Category" && question.isNotEmpty() && answer.isNotEmpty()){
+    fun onSaveButtonClicked(category: String, question: String, answer: String) {
+        if (category != "Category" && question.isNotEmpty() && answer.isNotEmpty()) {
             view.saveJoke("Your joke is added!")
-        }
-        else view.showError("The form is filled out incorrectly!")
+        } else view.showError("The form is filled out incorrectly!")
     }
 }

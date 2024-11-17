@@ -1,11 +1,9 @@
 package com.kristallik.jokeapp.ui.joke_details
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.kristallik.jokeapp.data.Joke
 import com.kristallik.jokeapp.databinding.FragmentJokeDetailsBinding
@@ -37,10 +35,8 @@ class JokeDetailsFragment : Fragment(), JokeDetailsView {
 
         // Получаем позицию шутки из аргументов фрагмента и загружаем ее детали через презентер
         arguments?.getInt(ARG_JOKE_POSITION)?.let { position ->
-            Log.d("JokeDetailsFragment", "Loading joke at position: $position")
             presenter.loadJokeDetails(position)
         } ?: run {
-            Log.e("JokeDetailsFragment", "No joke position passed")
             showErrorAndCloseScreen("Invalid joke position!")
         }
     }
@@ -54,7 +50,6 @@ class JokeDetailsFragment : Fragment(), JokeDetailsView {
     }
 
     override fun showJokeInfo(joke: Joke) {
-        if (_binding == null) return // Проверка на null перед доступом к binding
         with(binding) {
             category.text = joke.category
             question.text = joke.question
@@ -63,12 +58,11 @@ class JokeDetailsFragment : Fragment(), JokeDetailsView {
     }
 
     override fun showErrorAndCloseScreen(errorMessage: String) {
-        Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
         requireActivity().supportFragmentManager.popBackStack()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null // Освобождаем ресурсы привязки при уничтожении представления.
+        _binding = null
     }
 }
