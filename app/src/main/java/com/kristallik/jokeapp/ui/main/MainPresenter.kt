@@ -1,18 +1,18 @@
 package com.kristallik.jokeapp.ui.main
 
-import com.kristallik.jokeapp.data.JokeGenerator
+import com.kristallik.jokeapp.data.JokeGenerator.jokes
 
 class MainPresenter(private val view: MainView) {
-    private val generator = JokeGenerator
-    fun loadJokes() {
-        val data = generator.generateJokesData()
-        if (data.isEmpty()) {
+    suspend fun loadJokes() {
+        if (jokes.isEmpty()) {
             view.showError("There are no jokes available!")
         } else {
-            view.showJokes(data)
+            view.showJokes(jokes)
         }
     }
-    fun onActionButtonClicked(){
+
+    fun onActionButtonClicked() {
         view.addJoke()
     }
+
 }
