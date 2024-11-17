@@ -55,13 +55,11 @@ class AddJokeFragment : Fragment(), AddJokeView {
 
     override fun showError(errorMessage: String) {
         Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
-//        requireActivity().supportFragmentManager.popBackStack()
     }
 
     override fun saveJoke(message: String) {
         val newJoke = Joke(jokes.size, category, question, answer)
-//        setFragmentResult("requestKey", bundleOf("bundleKey" to newJoke))
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+        setFragmentResult("requestKey", bundleOf("bundleKey" to newJoke))
         requireActivity().supportFragmentManager.popBackStack()
     }
 
