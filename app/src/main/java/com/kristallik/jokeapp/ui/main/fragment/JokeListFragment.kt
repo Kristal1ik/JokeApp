@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kristallik.jokeapp.R
 import com.kristallik.jokeapp.data.Joke
@@ -16,11 +17,8 @@ import com.kristallik.jokeapp.ui.add_joke.fragment.AddJokeFragment
 import com.kristallik.jokeapp.ui.joke_details.JokeDetailsFragment
 import com.kristallik.jokeapp.ui.main.MainPresenter
 import com.kristallik.jokeapp.ui.main.MainView
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.delay as delay
 
 
 // TODO: Не показывать загурзку, если не было изменений в списке шуток
@@ -56,19 +54,27 @@ class JokeListFragment : Fragment(), MainView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         presenter = MainPresenter(this)
-        setFragmentResultListener("requestKey") { _, bundle ->
-            val newJoke = bundle.getParcelable<Joke>("bundleKey")
-            newJoke?.let {
-                jokes.add(it)
+        viewLifecycleOwner.lifecycleScope.launch {
+            binding.progressBar.visibility = View.VISIBLE
+            setFragmentResultListener("REQUEST_KEY") { _, bundle ->
+                val newJoke = bundle.getParcelable<Joke>("BUNDLE_KEY")
+                newJoke?.let {
+                    jokes.add(it)
+                    println("get")
+                    println(jokes)
+                    adapter.submitList(jokes)
+                }
             }
-        }
-        CoroutineScope(Dispatchers.Main).launch {
             presenter.loadJokes()
+            println("coroutine")
+            println(jokes)
             createRecyclerViewList()
         }
+
         savedInstanceState?.let {
             currentPosition = it.getInt(CONST_CURRENT_POSITION, 0)
         }
+
         binding.recyclerview.scrollToPosition(currentPosition) // Прокручиваем к сохраненной позиции
 
         binding.addActionButton.setOnClickListener {
@@ -90,13 +96,10 @@ class JokeListFragment : Fragment(), MainView {
         }
     }
 
-    override suspend fun showJokes(jokes: ArrayList<Joke>) = coroutineScope {
-        val job = launch {
-            binding.progressBar.visibility = View.VISIBLE
-            delay(2000L)
-            binding.progressBar.visibility = View.INVISIBLE
-        }
-        job.join()
+    override suspend fun showJokes(jokes: ArrayList<Joke>) {
+        binding.progressBar.visibility = View.VISIBLE
+        delay(2000L)
+        binding.progressBar.visibility = View.INVISIBLE
         binding.errorText.text = ""
         adapter.submitList(jokes)
     }
