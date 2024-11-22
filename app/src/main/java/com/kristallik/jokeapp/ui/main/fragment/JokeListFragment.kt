@@ -14,6 +14,8 @@ import com.kristallik.jokeapp.data.JokeGenerator.jokes
 import com.kristallik.jokeapp.databinding.FragmentJokeListBinding
 import com.kristallik.jokeapp.recycler.adapters.JokeListAdapter
 import com.kristallik.jokeapp.ui.add_joke.fragment.AddJokeFragment
+import com.kristallik.jokeapp.ui.add_joke.fragment.AddJokeFragment.Companion.BUNDLE_KEY
+import com.kristallik.jokeapp.ui.add_joke.fragment.AddJokeFragment.Companion.REQUEST_KEY
 import com.kristallik.jokeapp.ui.joke_details.JokeDetailsFragment
 import com.kristallik.jokeapp.ui.main.MainPresenter
 import com.kristallik.jokeapp.ui.main.MainView
@@ -54,20 +56,17 @@ class JokeListFragment : Fragment(), MainView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         presenter = MainPresenter(this)
-        viewLifecycleOwner.lifecycleScope.launch {
-            binding.progressBar.visibility = View.VISIBLE
-            setFragmentResultListener("REQUEST_KEY") { _, bundle ->
-                val newJoke = bundle.getParcelable<Joke>("BUNDLE_KEY")
-                newJoke?.let {
-                    jokes.add(it)
-                    println("get")
-                    println(jokes)
-                    adapter.submitList(jokes)
-                }
+        setFragmentResultListener(REQUEST_KEY) { _, bundle ->
+            val newJoke = bundle.getParcelable<Joke>(BUNDLE_KEY)
+            newJoke?.let {
+                jokes.add(it)
+                adapter.submitList(ArrayList(jokes))
+                binding.errorText.text = ""
             }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
             presenter.loadJokes()
-            println("coroutine")
-            println(jokes)
             createRecyclerViewList()
         }
 
@@ -97,8 +96,7 @@ class JokeListFragment : Fragment(), MainView {
     }
 
     override suspend fun showJokes(jokes: ArrayList<Joke>) {
-        binding.progressBar.visibility = View.VISIBLE
-        delay(2000L)
+        delay(2000)
         binding.progressBar.visibility = View.INVISIBLE
         binding.errorText.text = ""
         adapter.submitList(jokes)

@@ -1,8 +1,7 @@
 package com.kristallik.jokeapp.ui.add_joke
 
 class AddJokePresenter(private val view: AddJokeView) {
-    private val categories = listOf("Category", "Pun", "Satire", "Observational comedy")
-
+    private val categories = listOf("Pun", "Satire", "Observational comedy")
     fun loadCategories() {
         view.showCategories(categories)
     }

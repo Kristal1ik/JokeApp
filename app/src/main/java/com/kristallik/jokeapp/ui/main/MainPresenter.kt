@@ -14,5 +14,4 @@ class MainPresenter(private val view: MainView) {
     fun onActionButtonClicked() {
         view.addJoke()
     }
-
 }
