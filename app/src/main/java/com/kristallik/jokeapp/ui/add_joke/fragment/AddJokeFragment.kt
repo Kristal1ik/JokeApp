@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
@@ -25,10 +26,10 @@ class AddJokeFragment : Fragment(), AddJokeView {
     private lateinit var question: String
     private lateinit var answer: String
 
-//    companion object {
-//        const val BUNDLE_KEY = "BUNDLE_KEY"
-//        const val REQUEST_KEY = "REQUEST_KEY"
-//    }
+    companion object {
+        const val BUNDLE_KEY = "BUNDLE_KEY"
+        const val REQUEST_KEY = "REQUEST_KEY"
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,7 +44,8 @@ class AddJokeFragment : Fragment(), AddJokeView {
         presenter = AddJokePresenter(this)
         presenter.loadCategories()
         binding.saveButton.setOnClickListener {
-            category = binding.categoriesSpinner.selectedItem.toString()
+            category = (binding.menu.editText as? AutoCompleteTextView)?.text.toString()
+            println(category)
             question = binding.question.text.toString()
             answer = binding.answer.text.toString()
             presenter.onSaveButtonClicked(category, question, answer)
@@ -52,10 +54,8 @@ class AddJokeFragment : Fragment(), AddJokeView {
     }
 
     override fun showCategories(categories: List<String>) {
-        val adapter =
-            ArrayAdapter(requireContext(), R.layout.spinner, categories)
-        adapter.setDropDownViewResource(R.layout.spinner_item)
-        binding.categoriesSpinner.adapter = adapter
+        val adapterMenu = ArrayAdapter(requireContext(), R.layout.spinner_item, categories)
+        (binding.menu.editText as? AutoCompleteTextView)?.setAdapter(adapterMenu)
     }
 
     override fun showError(errorMessage: String) {
@@ -64,7 +64,7 @@ class AddJokeFragment : Fragment(), AddJokeView {
 
     override fun saveJoke(message: String) {
         val newJoke = Joke(jokes.size, category, question, answer)
-        setFragmentResult("REQUEST_KEY", bundleOf("BUNDLE_KEY" to newJoke))
+        setFragmentResult(REQUEST_KEY, bundleOf(BUNDLE_KEY to newJoke))
         requireActivity().supportFragmentManager.popBackStack()
     }
 
