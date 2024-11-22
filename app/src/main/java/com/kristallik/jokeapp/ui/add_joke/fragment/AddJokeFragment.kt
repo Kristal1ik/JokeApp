@@ -16,8 +16,6 @@ import com.kristallik.jokeapp.databinding.FragmentAddJokeBinding
 import com.kristallik.jokeapp.ui.add_joke.AddJokePresenter
 import com.kristallik.jokeapp.ui.add_joke.AddJokeView
 
-    const val BUNDLE_KEY = "BUNDLE_KEY"
-    const val REQUEST_KEY = "REQUEST_KEY"
 
 class AddJokeFragment : Fragment(), AddJokeView {
     private var _binding: FragmentAddJokeBinding? = null
@@ -26,6 +24,11 @@ class AddJokeFragment : Fragment(), AddJokeView {
     private lateinit var category: String
     private lateinit var question: String
     private lateinit var answer: String
+
+//    companion object {
+//        const val BUNDLE_KEY = "BUNDLE_KEY"
+//        const val REQUEST_KEY = "REQUEST_KEY"
+//    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -61,7 +64,7 @@ class AddJokeFragment : Fragment(), AddJokeView {
 
     override fun saveJoke(message: String) {
         val newJoke = Joke(jokes.size, category, question, answer)
-        setFragmentResult(REQUEST_KEY, bundleOf(BUNDLE_KEY to newJoke))
+        setFragmentResult("REQUEST_KEY", bundleOf("BUNDLE_KEY" to newJoke))
         requireActivity().supportFragmentManager.popBackStack()
     }
 
