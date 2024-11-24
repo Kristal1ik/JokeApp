@@ -10,7 +10,7 @@ data class Joke(
     val delivery: String,
     val source: String
 
-    ) : Parcelable {
+) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readInt(),
         parcel.readString() ?: "",

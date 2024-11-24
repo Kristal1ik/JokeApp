@@ -14,10 +14,12 @@ class JokeListAdapter(private val clickListener: (Int) -> Unit) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JokeViewHolder {
         return if (viewType == 1) {
-            val binding = JokeItemNetBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            val binding =
+                JokeItemNetBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             JokeViewHolder.NetworkJokeViewHolder(binding)
         } else {
-            val binding = JokeItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            val binding =
+                JokeItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             JokeViewHolder.ManualJokeViewHolder(binding)
         }
     }
