@@ -52,8 +52,8 @@ class JokeDetailsFragment : Fragment(), JokeDetailsView {
     override fun showJokeInfo(joke: Joke) {
         with(binding) {
             category.text = joke.category
-            question.text = joke.question
-            answer.text = joke.answer
+            question.text = joke.setup
+            answer.text = joke.delivery
         }
     }
 

@@ -58,7 +58,6 @@
                     android:inputType="none"
                     android:textColor="@color/text"
                     android:textColorHint="@color/text"
-                    android:alpha="0.7"
                     android:textSize="20sp" />
             </com.google.android.material.textfield.TextInputLayout>
 

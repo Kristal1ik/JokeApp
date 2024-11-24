@@ -63,9 +63,10 @@ class AddJokeFragment : Fragment(), AddJokeView {
     }
 
     override fun saveJoke(message: String) {
-        val newJoke = Joke(jokes.size, category, question, answer)
+        val newJoke = Joke(jokes.size, category, question, answer, "user")
         setFragmentResult(REQUEST_KEY, bundleOf(BUNDLE_KEY to newJoke))
         requireActivity().supportFragmentManager.popBackStack()
+
     }
 
     override fun onDestroyView() {
