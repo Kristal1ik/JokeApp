@@ -4,17 +4,26 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kristallik.jokeapp.R
 import com.kristallik.jokeapp.data.Joke
+import com.kristallik.jokeapp.data.JokeGenerator.jokes
 import com.kristallik.jokeapp.databinding.FragmentJokeListBinding
 import com.kristallik.jokeapp.recycler.adapters.JokeListAdapter
+import com.kristallik.jokeapp.ui.add_joke.fragment.AddJokeFragment
+import com.kristallik.jokeapp.ui.add_joke.fragment.AddJokeFragment.Companion.BUNDLE_KEY
+import com.kristallik.jokeapp.ui.add_joke.fragment.AddJokeFragment.Companion.REQUEST_KEY
 import com.kristallik.jokeapp.ui.joke_details.JokeDetailsFragment
 import com.kristallik.jokeapp.ui.main.MainPresenter
 import com.kristallik.jokeapp.ui.main.MainView
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.delay as delay
 
+
+// TODO: Не показывать загурзку, если не было изменений в списке шуток
 class JokeListFragment : Fragment(), MainView {
 
     private var _binding: FragmentJokeListBinding? = null
@@ -24,10 +33,7 @@ class JokeListFragment : Fragment(), MainView {
     private val adapter = JokeListAdapter { position ->
         val jokeDetailsFragment = JokeDetailsFragment.newInstance(position)
         parentFragmentManager.beginTransaction()
-            .replace(
-                R.id.fragment_container,
-                jokeDetailsFragment
-            )
+            .replace(R.id.fragment_container, jokeDetailsFragment)
             .addToBackStack(null)
             .commit()
     }
@@ -39,7 +45,8 @@ class JokeListFragment : Fragment(), MainView {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentJokeListBinding.inflate(inflater, container, false)
@@ -49,14 +56,29 @@ class JokeListFragment : Fragment(), MainView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         presenter = MainPresenter(this)
-        createRecyclerViewList()
+        setFragmentResultListener(REQUEST_KEY) { _, bundle ->
+            val newJoke = bundle.getParcelable<Joke>(BUNDLE_KEY)
+            newJoke?.let {
+                jokes.add(it)
+                adapter.submitList(ArrayList(jokes))
+                binding.errorText.text = ""
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            presenter.loadJokes()
+            createRecyclerViewList()
+        }
 
         savedInstanceState?.let {
             currentPosition = it.getInt(CONST_CURRENT_POSITION, 0)
         }
 
-        presenter.loadJokes()
-        binding.recyclerview.scrollToPosition(currentPosition)
+        binding.recyclerview.scrollToPosition(currentPosition) // Прокручиваем к сохраненной позиции
+
+        binding.addActionButton.setOnClickListener {
+            presenter.onActionButtonClicked()
+        }
     }
 
     private fun createRecyclerViewList() {
@@ -66,7 +88,6 @@ class JokeListFragment : Fragment(), MainView {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        // Предотвращение NullPointerException при повороте
         if (_binding != null) {
             currentPosition =
                 (binding.recyclerview.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
@@ -74,12 +95,24 @@ class JokeListFragment : Fragment(), MainView {
         }
     }
 
-    override fun showJokes(jokes: ArrayList<Joke>) {
+    override suspend fun showJokes(jokes: ArrayList<Joke>) {
+        delay(2000)
+        binding.progressBar.visibility = View.INVISIBLE
+        binding.errorText.text = ""
         adapter.submitList(jokes)
     }
 
     override fun showError(errorMessage: String) {
-        Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
+        binding.errorText.text = errorMessage
+        binding.progressBar.visibility = View.INVISIBLE
+    }
+
+    override fun addJoke() {
+        val addJokeFragment = AddJokeFragment()
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, addJokeFragment)
+            .addToBackStack(null)
+            .commit()
     }
 
     override fun onDestroyView() {
