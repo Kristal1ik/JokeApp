@@ -13,6 +13,7 @@ sealed class JokeViewHolder(binding: View) : RecyclerView.ViewHolder(binding) {
     class NetworkJokeViewHolder(private val binding: JokeItemNetBinding) :
         JokeViewHolder(binding.root) {
         override fun bind(joke: Joke) {
+            binding.category.text = joke.category
             binding.question.text = joke.setup
             binding.answer.text = joke.delivery
         }
@@ -21,6 +22,7 @@ sealed class JokeViewHolder(binding: View) : RecyclerView.ViewHolder(binding) {
     class ManualJokeViewHolder(private val binding: JokeItemBinding) :
         JokeViewHolder(binding.root) {
         override fun bind(joke: Joke) {
+            binding.category.text = joke.category
             binding.question.text = joke.setup
             binding.answer.text = joke.delivery
         }
