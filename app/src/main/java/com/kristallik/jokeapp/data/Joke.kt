@@ -8,7 +8,7 @@ data class Joke(
     val category: String,
     val setup: String,
     val delivery: String,
-    val source: String
+    val source: Source
 
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
@@ -16,7 +16,7 @@ data class Joke(
         parcel.readString() ?: "",
         parcel.readString() ?: "",
         parcel.readString() ?: "",
-        parcel.readString() ?: ""
+        Source.valueOf(parcel.readString() ?: "")
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -24,7 +24,7 @@ data class Joke(
         parcel.writeString(category)
         parcel.writeString(delivery)
         parcel.writeString(setup)
-        parcel.writeString(source)
+        parcel.writeString(source.name)
     }
 
     override fun describeContents(): Int {
@@ -40,4 +40,9 @@ data class Joke(
             return arrayOfNulls(size)
         }
     }
+}
+
+enum class Source {
+    TYPE_NETWORK,
+    TYPE_MANUAL
 }

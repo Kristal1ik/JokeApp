@@ -27,8 +27,7 @@ object JokeGenerator {
     fun generateJokesData(): ArrayList<Joke> {
         jokes.clear()
         for (i in 0..<answers.size) {
-//            val position = Random.nextInt(0, questions.size)
-            jokes.add(i, Joke(i, "Pun", questions[i], answers[i], "hardcode"))
+            jokes.add(i, Joke(i, "Pun", questions[i], answers[i], Source.TYPE_MANUAL))
         }
         return jokes
     }
