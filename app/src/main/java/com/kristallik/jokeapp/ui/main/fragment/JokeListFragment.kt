@@ -1,6 +1,5 @@
 package com.kristallik.jokeapp.ui.main.fragment
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.kristallik.jokeapp.R
 import com.kristallik.jokeapp.data.Joke
 import com.kristallik.jokeapp.data.JokeGenerator.jokes
-import com.kristallik.jokeapp.data.PreferencesProvider
 import com.kristallik.jokeapp.databinding.FragmentJokeListBinding
 import com.kristallik.jokeapp.recycler.adapters.JokeListAdapter
 import com.kristallik.jokeapp.ui.add_joke.fragment.AddJokeFragment
@@ -25,12 +23,11 @@ import com.kristallik.jokeapp.ui.main.MainView
 import kotlinx.coroutines.launch
 
 
-class JokeListFragment : Fragment(), MainView, PreferencesProvider {
+class JokeListFragment : Fragment(), MainView {
 
     private var _binding: FragmentJokeListBinding? = null
     private val binding get() = _binding!!
     private lateinit var presenter: MainPresenter
-    private var count: Int = 0
 
     private val adapter = JokeListAdapter { position ->
         currentPosition = position
@@ -45,8 +42,6 @@ class JokeListFragment : Fragment(), MainView, PreferencesProvider {
 
     companion object {
         const val CONST_CURRENT_POSITION = "CURRENT_POSITION"
-        const val JOKES_COUNT = "JOKES_COUNT"
-        const val PREF = "PREF"
     }
 
     override fun onCreateView(
@@ -60,7 +55,6 @@ class JokeListFragment : Fragment(), MainView, PreferencesProvider {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         presenter = MainPresenter(this)
-        count = getJokesCount()
         createRecyclerViewList()
 
         setFragmentResultListener(REQUEST_KEY) { _, bundle ->
@@ -92,7 +86,6 @@ class JokeListFragment : Fragment(), MainView, PreferencesProvider {
         // Восстановление данных
         savedInstanceState?.let {
             currentPosition = it.getInt(CONST_CURRENT_POSITION, 0)
-            count = it.getInt(JOKES_COUNT, 0)
         }
         binding.recyclerview.scrollToPosition(currentPosition) // Прокручиваем к сохраненной позиции
 
@@ -113,7 +106,6 @@ class JokeListFragment : Fragment(), MainView, PreferencesProvider {
                 (binding.recyclerview.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
             outState.putInt(CONST_CURRENT_POSITION, currentPosition)
         }
-        setJokesCount(count)
     }
 
     override suspend fun showJokes(jokes: ArrayList<Joke>) {
@@ -144,16 +136,5 @@ class JokeListFragment : Fragment(), MainView, PreferencesProvider {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    override fun getJokesCount(): Int {
-        val sharedPreferences =
-            requireContext().getSharedPreferences(PREF, Context.MODE_PRIVATE)
-        return sharedPreferences.getInt(JOKES_COUNT, 0)
-    }
-
-    override fun setJokesCount(count: Int) {
-        val sharedPreferences = requireContext().getSharedPreferences(PREF, Context.MODE_PRIVATE)
-        sharedPreferences.edit().putInt(JOKES_COUNT, count).apply()
     }
 }

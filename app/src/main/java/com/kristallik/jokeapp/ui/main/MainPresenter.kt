@@ -3,7 +3,6 @@ package com.kristallik.jokeapp.ui.main
 import com.kristallik.jokeapp.data.Joke
 import com.kristallik.jokeapp.data.JokeGenerator
 import com.kristallik.jokeapp.data.JokeListResponse
-import com.kristallik.jokeapp.data.PreferencesProvider
 import com.kristallik.jokeapp.data.Source
 import com.kristallik.jokeapp.network.RetrofitInstance
 import kotlinx.coroutines.Dispatchers
@@ -13,13 +12,14 @@ class MainPresenter(private val view: MainView) {
     private val generator = JokeGenerator
     private var currentPage = 0
     private val jokesPerPage = 10
-    private var count = (view as PreferencesProvider).getJokesCount()
 
 
     suspend fun loadJokes() {
-        if (count == 0) {
+        if (!generator.isLocalLoaded) {
             generator.jokes = generator.generateJokesData()
+            generator.isLocalLoaded = true
             currentPage = 0
+            println(generator.jokes)
             loadMoreJokes()
         }
     }
@@ -47,7 +47,6 @@ class MainPresenter(private val view: MainView) {
                 view.showError("No more jokes available!")
             } else {
                 currentPage++
-                (view as PreferencesProvider).setJokesCount(count + response.jokes.size)
                 view.showJokes(generator.jokes)
             }
         } catch (e: Exception) {
