@@ -3,7 +3,8 @@ package com.kristallik.jokeapp.data
 
 // object, чтобы не создавался при каждом вызове новый экземпляр
 object JokeGenerator {
-    var isLocalLoaded: Boolean = false
+    val isLocalLoaded: Boolean
+        get() = jokes.size != 0
     var jokes = ArrayList<Joke>()
     private val questions = listOf(
         "What does Santa suffer from if he gets stuck in a chimney?",
