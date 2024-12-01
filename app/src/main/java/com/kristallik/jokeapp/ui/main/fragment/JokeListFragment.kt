@@ -39,9 +39,11 @@ class JokeListFragment : Fragment(), MainView {
     }
 
     private var currentPosition: Int = 0
+    private var currentJokesList: ArrayList<Joke> = ArrayList()
 
     companion object {
         const val CONST_CURRENT_POSITION = "CURRENT_POSITION"
+        const val JOKES = "JOKES"
     }
 
     override fun onCreateView(
@@ -86,8 +88,10 @@ class JokeListFragment : Fragment(), MainView {
         // Восстановление данных
         savedInstanceState?.let {
             currentPosition = it.getInt(CONST_CURRENT_POSITION, 0)
+            currentJokesList = it.getParcelableArrayList<Joke>(JOKES) ?: ArrayList()
+            adapter.submitList(currentJokesList)
         }
-        binding.recyclerview.scrollToPosition(currentPosition) // Прокручиваем к сохраненной позиции
+        binding.recyclerview.scrollToPosition(currentPosition)
 
         binding.addActionButton.setOnClickListener {
             presenter.onActionButtonClicked()
@@ -105,6 +109,7 @@ class JokeListFragment : Fragment(), MainView {
             currentPosition =
                 (binding.recyclerview.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
             outState.putInt(CONST_CURRENT_POSITION, currentPosition)
+            outState.putParcelableArrayList(JOKES, jokes)
         }
     }
 
