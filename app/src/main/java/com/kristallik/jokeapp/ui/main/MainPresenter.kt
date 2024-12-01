@@ -16,10 +16,8 @@ class MainPresenter(private val view: MainView) {
 
     suspend fun loadJokes() {
         if (!generator.isLocalLoaded) {
-            generator.jokes = generator.generateJokesData()
-            generator.isLocalLoaded = true
+            generator.generateJokesData()
             currentPage = 0
-            println(generator.jokes)
             loadMoreJokes()
         }
     }

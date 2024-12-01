@@ -1,7 +1,6 @@
 package com.kristallik.jokeapp.ui.add_joke.fragment
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -47,7 +46,6 @@ class AddJokeFragment : Fragment(), AddJokeView {
         presenter.loadCategories()
         binding.saveButton.setOnClickListener {
             category = (binding.menu.editText as? AutoCompleteTextView)?.text.toString()
-            Log.d("category", category)
             question = binding.question.text.toString()
             answer = binding.answer.text.toString()
             presenter.onSaveButtonClicked(category, question, answer)
