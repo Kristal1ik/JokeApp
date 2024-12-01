@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.kristallik.jokeapp.data.Joke
 import com.kristallik.jokeapp.databinding.FragmentJokeDetailsBinding
@@ -33,7 +34,6 @@ class JokeDetailsFragment : Fragment(), JokeDetailsView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Получаем позицию шутки из аргументов фрагмента и загружаем ее детали через презентер
         arguments?.getInt(ARG_JOKE_POSITION)?.let { position ->
             presenter.loadJokeDetails(position)
         } ?: run {
@@ -52,12 +52,13 @@ class JokeDetailsFragment : Fragment(), JokeDetailsView {
     override fun showJokeInfo(joke: Joke) {
         with(binding) {
             category.text = joke.category
-            question.text = joke.question
-            answer.text = joke.answer
+            question.text = joke.setup
+            answer.text = joke.delivery
         }
     }
 
     override fun showErrorAndCloseScreen(errorMessage: String) {
+        Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
         requireActivity().supportFragmentManager.popBackStack()
     }
 

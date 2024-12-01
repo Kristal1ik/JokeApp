@@ -13,6 +13,7 @@ import androidx.fragment.app.setFragmentResult
 import com.kristallik.jokeapp.R
 import com.kristallik.jokeapp.data.Joke
 import com.kristallik.jokeapp.data.JokeGenerator.jokes
+import com.kristallik.jokeapp.data.Source
 import com.kristallik.jokeapp.databinding.FragmentAddJokeBinding
 import com.kristallik.jokeapp.ui.add_joke.AddJokePresenter
 import com.kristallik.jokeapp.ui.add_joke.AddJokeView
@@ -45,7 +46,6 @@ class AddJokeFragment : Fragment(), AddJokeView {
         presenter.loadCategories()
         binding.saveButton.setOnClickListener {
             category = (binding.menu.editText as? AutoCompleteTextView)?.text.toString()
-            println(category)
             question = binding.question.text.toString()
             answer = binding.answer.text.toString()
             presenter.onSaveButtonClicked(category, question, answer)
@@ -63,9 +63,11 @@ class AddJokeFragment : Fragment(), AddJokeView {
     }
 
     override fun saveJoke(message: String) {
-        val newJoke = Joke(jokes.size, category, question, answer)
+        val newJoke = Joke(jokes.size, category, question, answer, Source.TYPE_MANUAL)
         setFragmentResult(REQUEST_KEY, bundleOf(BUNDLE_KEY to newJoke))
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
         requireActivity().supportFragmentManager.popBackStack()
+
     }
 
     override fun onDestroyView() {

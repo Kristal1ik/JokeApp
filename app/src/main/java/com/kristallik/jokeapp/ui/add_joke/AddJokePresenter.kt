@@ -7,7 +7,7 @@ class AddJokePresenter(private val view: AddJokeView) {
     }
 
     fun onSaveButtonClicked(category: String, question: String, answer: String) {
-        if (category != "Category" && question.isNotEmpty() && answer.isNotEmpty()) {
+        if (question.isNotEmpty() && answer.isNotEmpty() && category.isNotEmpty()) {
             view.saveJoke("Your joke is added!")
         } else {
             view.showError("The form is filled out incorrectly!")
