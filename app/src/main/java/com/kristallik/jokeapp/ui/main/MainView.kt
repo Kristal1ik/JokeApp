@@ -6,5 +6,5 @@ interface MainView {
     suspend fun showJokes(jokes: List<Joke>)
     fun showError(errorMessage: String)
     fun addJoke()
-
+    fun showToast(message: String)
 }

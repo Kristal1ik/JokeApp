@@ -61,8 +61,22 @@ class MainPresenter(private val view: MainView) {
                 loadSavedJokes(context)
             }
         } catch (e: Exception) {
-            println(e)
-            view.showError("Failed to load jokes!")
+            view.showToast("Failed to load jokes! Loading cached jokes...")
+            loadCachedJokes(context)
+        }
+    }
+
+    private suspend fun loadCachedJokes(context: Context) {
+        val jokeDao = JokeDatabase.getDatabase(context).jokeDao()
+        val cachedJokes = withContext(Dispatchers.IO) {
+            jokeDao.getAllJokesSaved()
+        }
+
+        if (cachedJokes.isNotEmpty()) {
+            view.showToast("Loaded cached jokes due to network failure.")
+            view.showJokes(cachedJokes)
+        } else {
+            view.showError("No cached jokes available!")
         }
     }
 
