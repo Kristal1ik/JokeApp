@@ -1,19 +1,32 @@
 package com.kristallik.jokeapp.ui.joke_details
 
-import com.kristallik.jokeapp.data.Joke
-import com.kristallik.jokeapp.data.JokeGenerator
+import android.content.Context
+import com.kristallik.jokeapp.db.JokeDatabase
 import com.kristallik.jokeapp.ui.joke_details.JokeDetailsView.Companion.VALUE_IF_ERROR
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 // Должен знать о view
 class JokeDetailsPresenter(private val view: JokeDetailsView) {
-    fun loadJokeDetails(position: Int) {
-        if (position == VALUE_IF_ERROR) {
+
+    fun loadJokeDetails(jokeId: Int, context: Context) {
+        if (jokeId == VALUE_IF_ERROR) {
             view.showErrorAndCloseScreen("Invalid joke position!")
         } else {
-            (JokeGenerator.jokes[position] as? Joke)?.let {
-                view.showJokeInfo(it)
-            } ?: view.showErrorAndCloseScreen("Invalid joke data!")
+            CoroutineScope(Dispatchers.IO).launch {
+                val jokeDao = JokeDatabase.getDatabase(context).jokeDao()
+                val joke = jokeDao.getJokeById(jokeId) // Получаем шутку по ID
 
+                withContext(Dispatchers.Main) {
+                    if (joke != null) {
+                        view.showJokeInfo(joke) // Отображаем информацию о шутке
+                    } else {
+                        view.showErrorAndCloseScreen("Invalid joke data!")
+                    }
+                }
+            }
         }
     }
 }
