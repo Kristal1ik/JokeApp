@@ -69,7 +69,7 @@ class JokeListFragment : Fragment(), MainView {
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            presenter.loadJokes()
+            presenter.loadJokes(requireContext())
         }
 
         binding.recyclerview.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -79,7 +79,7 @@ class JokeListFragment : Fragment(), MainView {
                 if (layoutManager.findLastCompletelyVisibleItemPosition() == adapter.itemCount - 1) {
                     viewLifecycleOwner.lifecycleScope.launch {
                         binding.progressBar.visibility = View.VISIBLE
-                        presenter.loadMoreJokes()
+                        presenter.loadMoreJokes(requireContext())
                         binding.progressBar.visibility = View.INVISIBLE
                     }
                 }
@@ -113,7 +113,7 @@ class JokeListFragment : Fragment(), MainView {
         }
     }
 
-    override suspend fun showJokes(jokes: ArrayList<Joke>) {
+    override suspend fun showJokes(jokes: List<Joke>) {
         binding.progressBar.visibility = View.INVISIBLE
         binding.errorText.text = ""
         adapter.submitList(jokes.toList())
@@ -131,6 +131,7 @@ class JokeListFragment : Fragment(), MainView {
             .addToBackStack(null)
             .commit()
     }
+
 
 
     override fun onResume() {

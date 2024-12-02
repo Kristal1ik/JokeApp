@@ -35,7 +35,7 @@ class JokeDetailsFragment : Fragment(), JokeDetailsView {
         super.onViewCreated(view, savedInstanceState)
 
         arguments?.getInt(ARG_JOKE_POSITION)?.let { position ->
-            presenter.loadJokeDetails(position)
+            presenter.loadJokeDetails(position, requireContext())
         } ?: run {
             showErrorAndCloseScreen("Invalid joke position!")
         }

@@ -8,12 +8,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Toast
-import androidx.core.os.bundleOf
-import androidx.fragment.app.setFragmentResult
 import com.kristallik.jokeapp.R
-import com.kristallik.jokeapp.data.Joke
-import com.kristallik.jokeapp.data.JokeGenerator.jokes
-import com.kristallik.jokeapp.data.Source
 import com.kristallik.jokeapp.databinding.FragmentAddJokeBinding
 import com.kristallik.jokeapp.ui.add_joke.AddJokePresenter
 import com.kristallik.jokeapp.ui.add_joke.AddJokeView
@@ -48,7 +43,7 @@ class AddJokeFragment : Fragment(), AddJokeView {
             category = (binding.menu.editText as? AutoCompleteTextView)?.text.toString()
             question = binding.question.text.toString()
             answer = binding.answer.text.toString()
-            presenter.onSaveButtonClicked(category, question, answer)
+            presenter.onSaveButtonClicked(category, question, answer, view.context)
         }
 
     }
@@ -63,8 +58,8 @@ class AddJokeFragment : Fragment(), AddJokeView {
     }
 
     override fun saveJoke(message: String) {
-        val newJoke = Joke(jokes.size, category, question, answer, Source.TYPE_MANUAL)
-        setFragmentResult(REQUEST_KEY, bundleOf(BUNDLE_KEY to newJoke))
+//        val newJoke = Joke(jokes.size, category, question, answer, Source.TYPE_MANUAL)
+//        setFragmentResult(REQUEST_KEY, bundleOf(BUNDLE_KEY to newJoke))
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
         requireActivity().supportFragmentManager.popBackStack()
 
