@@ -1,17 +1,18 @@
 package com.kristallik.jokeapp.db
 
+import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import android.content.Context
-import com.kristallik.jokeapp.data.Joke
 import com.kristallik.jokeapp.data.NetworkJoke
+import com.kristallik.jokeapp.data.SavedJoke
 
-@Database(entities = [Joke::class, NetworkJoke::class], version = 4, exportSchema = false)
+// Определение класса базы данных
+@Database(entities = [SavedJoke::class, NetworkJoke::class], version = 3)
 abstract class JokeDatabase : RoomDatabase() {
-
-    abstract fun jokeDao(): JokeDao
+    abstract fun savedJokeDao(): SavedJokeDao
     abstract fun networkJokeDao(): NetworkJokeDao
+
 
     companion object {
         @Volatile
@@ -23,10 +24,12 @@ abstract class JokeDatabase : RoomDatabase() {
                     context.applicationContext,
                     JokeDatabase::class.java,
                     "joke_database"
-                ).fallbackToDestructiveMigration().build()
+                ).fallbackToDestructiveMigration()
+                    .build()
                 INSTANCE = instance
                 instance
             }
         }
     }
 }
+
