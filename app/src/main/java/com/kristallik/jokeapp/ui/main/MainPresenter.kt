@@ -2,7 +2,9 @@ package com.kristallik.jokeapp.ui.main
 
 import android.content.Context
 import com.kristallik.jokeapp.data.Joke
+import com.kristallik.jokeapp.data.JokeGenerator
 import com.kristallik.jokeapp.data.JokeListResponse
+import com.kristallik.jokeapp.data.NetworkJoke
 import com.kristallik.jokeapp.data.Source
 import com.kristallik.jokeapp.db.JokeDatabase
 import com.kristallik.jokeapp.network.RetrofitInstance
@@ -10,24 +12,32 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class MainPresenter(private val view: MainView) {
+    private val generator = JokeGenerator
     private var currentPage = 0
     private val jokesPerPage = 10
 
+
     suspend fun loadJokes(context: Context) {
-        loadSavedJokes(context)
-        loadMoreJokes(context)
-    }
+        if (!generator.isLocalLoaded) {
+            generator.generateJokesData()
+            withContext(Dispatchers.IO) {
+                val savedJokesDao = JokeDatabase.getDatabase(context).savedJokeDao()
+                for (joke in savedJokesDao.getAllJokesSaved()) {
+                    generator.jokes.add(
+                        Joke(
+                            joke.id,
+                            joke.category,
+                            joke.setup,
+                            joke.delivery,
+                            joke.source
+                        )
+                    )
 
-    private suspend fun loadSavedJokes(context: Context) {
-        val jokeDao = JokeDatabase.getDatabase(context).jokeDao()
-        val savedJokes = withContext(Dispatchers.IO) {
-            jokeDao.getAllJokesSaved()
-        }
-
-        if (savedJokes.isNotEmpty()) {
-            view.showJokes(savedJokes)
-        } else {
-            view.showError("No saved jokes available!")
+                }
+            }
+//            println(generator.jokes)
+            currentPage = 0
+            loadMoreJokes(context)
         }
     }
 
@@ -39,44 +49,69 @@ class MainPresenter(private val view: MainView) {
                     page = currentPage
                 )
             }
-
-            val jokeDao = JokeDatabase.getDatabase(context).jokeDao()
-
-            withContext(Dispatchers.IO) {
-                for (joke in response.jokes) {
-                    val newNetworkJoke = Joke(
-                        category = joke.category,
-                        setup = joke.setup,
-                        delivery = joke.delivery,
-                        source = Source.TYPE_NETWORK
+            for (joke in response.jokes) {
+                generator.jokes.add(
+                    Joke(
+                        joke.id,
+                        joke.category,
+                        joke.setup,
+                        joke.delivery,
+                        Source.TYPE_NETWORK
                     )
-                    jokeDao.insertJoke(newNetworkJoke)
+                )
+                val networkJoke = NetworkJoke(
+                    joke.id, joke.category,
+                    joke.setup,
+                    joke.delivery,
+                    Source.TYPE_NETWORK,
+                    System.currentTimeMillis()
+                )
+                withContext(Dispatchers.IO) {
+                    val networkJokeDao = JokeDatabase.getDatabase(context).networkJokeDao()
+                    val existingJoke = networkJokeDao.getJokeById(joke.id)
+                    if (existingJoke == null) {
+                        networkJokeDao.insertJoke(networkJoke)
+                    }
                 }
             }
-
             if (response.jokes.isEmpty()) {
                 view.showError("No more jokes available!")
             } else {
                 currentPage++
-                loadSavedJokes(context)
+                view.showJokes(generator.jokes)
             }
         } catch (e: Exception) {
-            view.showToast("Failed to load jokes! Loading cached jokes...")
-            loadCachedJokes(context)
+            loadCashedJokes(context)
         }
     }
 
-    private suspend fun loadCachedJokes(context: Context) {
-        val jokeDao = JokeDatabase.getDatabase(context).jokeDao()
-        val cachedJokes = withContext(Dispatchers.IO) {
-            jokeDao.getAllJokesSaved()
-        }
+    private suspend fun loadCashedJokes(context: Context) {
+        val currentTime = System.currentTimeMillis()
+        val validTimeDuration = 24 * 60 * 60 * 1000
+        withContext(Dispatchers.Main) {
+            val networkJokesDao = JokeDatabase.getDatabase(context).networkJokeDao()
+            val networkJokes = networkJokesDao.getAllJokesSaved()
+            if (networkJokes.isNotEmpty()) {
+                if (currentTime - networkJokes[0].lastUpdated <= validTimeDuration) {
+                    for (joke in networkJokesDao.getAllJokesSaved()) {
+                        generator.jokes.add(
+                            Joke(
+                                joke.id,
+                                joke.category,
+                                joke.setup,
+                                joke.delivery,
+                                joke.source
+                            )
+                        )
+                    }
+                    view.showToast("Loaded cached jokes due to network failure.")
+                    currentPage++
+                    view.showJokes(generator.jokes)
 
-        if (cachedJokes.isNotEmpty()) {
-            view.showToast("Loaded cached jokes due to network failure.")
-            view.showJokes(cachedJokes)
-        } else {
-            view.showError("No cached jokes available!")
+                }
+            } else {
+                view.showToast("No saved jokes available! Please check your internet connection and try again.")
+            }
         }
     }
 
