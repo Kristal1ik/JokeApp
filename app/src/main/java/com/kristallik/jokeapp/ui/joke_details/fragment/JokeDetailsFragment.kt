@@ -1,4 +1,4 @@
-package com.kristallik.jokeapp.ui.joke_details
+package com.kristallik.jokeapp.ui.joke_details.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,6 +8,8 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.kristallik.jokeapp.data.Joke
 import com.kristallik.jokeapp.databinding.FragmentJokeDetailsBinding
+import com.kristallik.jokeapp.ui.joke_details.JokeDetailsPresenter
+import com.kristallik.jokeapp.ui.joke_details.JokeDetailsView
 
 class JokeDetailsFragment : Fragment(), JokeDetailsView {
     private var _binding: FragmentJokeDetailsBinding? = null
@@ -35,7 +37,7 @@ class JokeDetailsFragment : Fragment(), JokeDetailsView {
         super.onViewCreated(view, savedInstanceState)
 
         arguments?.getInt(ARG_JOKE_POSITION)?.let { position ->
-            presenter.loadJokeDetails(position, requireContext())
+            presenter.loadJokeDetails(position)
         } ?: run {
             showErrorAndCloseScreen("Invalid joke position!")
         }

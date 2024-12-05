@@ -1,7 +1,7 @@
 package com.kristallik.jokeapp.ui.add_joke
 
 import android.content.Context
-import com.kristallik.jokeapp.data.Joke
+import com.kristallik.jokeapp.data.SavedJoke
 import com.kristallik.jokeapp.data.Source
 import com.kristallik.jokeapp.db.JokeDatabase
 import kotlinx.coroutines.CoroutineScope
@@ -16,25 +16,19 @@ class AddJokePresenter(private val view: AddJokeView) {
 
     fun onSaveButtonClicked(category: String, question: String, answer: String, context: Context) {
         if (question.isNotEmpty() && answer.isNotEmpty() && category.isNotEmpty()) {
-            val newJoke = Joke(
-                id = 0,
-                category = category,
-                setup = question,
-                delivery = answer,
-                source = Source.TYPE_MANUAL
-            )
-            saveJoke(newJoke, context)
+            val newJSavedJoke = SavedJoke(0, category, answer, question, Source.TYPE_MANUAL)
+            saveToDB(newJSavedJoke, context)
+            view.saveJoke("Your joke is added!") // save to the generator.jokes
         } else {
             view.showError("The form is filled out incorrectly!")
         }
     }
 
-    private fun saveJoke(joke: Joke, context: Context) {
+    private fun saveToDB(joke: SavedJoke, context: Context) {
         CoroutineScope(Dispatchers.IO).launch {
-            val jokeDao = JokeDatabase.getDatabase(context).jokeDao()
-            jokeDao.insertJoke(joke)
+            val savedJokeDao = JokeDatabase.getDatabase(context).savedJokeDao()
+            savedJokeDao.insertJoke(joke)
         }
-        view.saveJoke("Your joke is added!")
-
     }
+
 }

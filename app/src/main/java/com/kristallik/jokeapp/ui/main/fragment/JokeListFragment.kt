@@ -18,7 +18,7 @@ import com.kristallik.jokeapp.recycler.adapters.JokeListAdapter
 import com.kristallik.jokeapp.ui.add_joke.fragment.AddJokeFragment
 import com.kristallik.jokeapp.ui.add_joke.fragment.AddJokeFragment.Companion.BUNDLE_KEY
 import com.kristallik.jokeapp.ui.add_joke.fragment.AddJokeFragment.Companion.REQUEST_KEY
-import com.kristallik.jokeapp.ui.joke_details.JokeDetailsFragment
+import com.kristallik.jokeapp.ui.joke_details.fragment.JokeDetailsFragment
 import com.kristallik.jokeapp.ui.main.MainPresenter
 import com.kristallik.jokeapp.ui.main.MainView
 import kotlinx.coroutines.launch
