@@ -17,6 +17,7 @@ interface SavedJokeDao {
     @Query("SELECT * FROM jokes_saved WHERE id = :jokeId")
     suspend fun getJokeById(jokeId: Int): SavedJoke?
 }
+
 @Dao
 interface NetworkJokeDao {
     @Query("SELECT * FROM jokes_network")
