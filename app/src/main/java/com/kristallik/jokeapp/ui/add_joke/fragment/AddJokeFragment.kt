@@ -48,7 +48,7 @@ class AddJokeFragment : Fragment(), AddJokeView {
             category = (binding.menu.editText as? AutoCompleteTextView)?.text.toString()
             question = binding.question.text.toString()
             answer = binding.answer.text.toString()
-            presenter.onSaveButtonClicked(category, question, answer)
+            presenter.onSaveButtonClicked(category, question, answer, requireContext())
         }
 
     }
