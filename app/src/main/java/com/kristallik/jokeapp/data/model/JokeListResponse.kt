@@ -1,4 +1,6 @@
-package com.kristallik.jokeapp.data
+package com.kristallik.jokeapp.data.model
+
+import com.kristallik.jokeapp.domain.model.Joke
 
 
 data class JokeListResponse(

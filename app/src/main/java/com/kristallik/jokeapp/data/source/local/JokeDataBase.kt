@@ -1,11 +1,12 @@
-package com.kristallik.jokeapp.db
+package com.kristallik.jokeapp.data.source.local
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.kristallik.jokeapp.data.NetworkJoke
-import com.kristallik.jokeapp.data.SavedJoke
+import com.kristallik.jokeapp.data.model.NetworkJoke
+import com.kristallik.jokeapp.data.model.SavedJoke
+
 
 // Определение класса базы данных
 @Database(entities = [SavedJoke::class, NetworkJoke::class], version = 3)
