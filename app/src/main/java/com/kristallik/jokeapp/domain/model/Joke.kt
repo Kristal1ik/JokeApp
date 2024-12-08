@@ -1,28 +1,8 @@
-package com.kristallik.jokeapp.data
+package com.kristallik.jokeapp.domain.model
 
 import android.os.Parcel
 import android.os.Parcelable
-import androidx.room.Entity
-import androidx.room.PrimaryKey
 
-@Entity(tableName = "jokes_saved")
-data class SavedJoke(
-    @PrimaryKey(autoGenerate = true) val id: Int,
-    val category: String,
-    val setup: String,
-    val delivery: String,
-    val source: Source
-)
-
-@Entity(tableName = "jokes_network")
-data class NetworkJoke(
-    @PrimaryKey(autoGenerate = true) val id: Int,
-    val category: String,
-    val setup: String,
-    val delivery: String,
-    val source: Source,
-    val lastUpdated: Long = System.currentTimeMillis()
-)
 
 data class Joke(
     val id: Int,
