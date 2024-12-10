@@ -9,7 +9,7 @@ import com.kristallik.jokeapp.data.model.SavedJoke
 
 
 // Определение класса базы данных
-@Database(entities = [SavedJoke::class, NetworkJoke::class], version = 3)
+@Database(entities = [SavedJoke::class, NetworkJoke::class], version = 4)
 abstract class JokeDatabase : RoomDatabase() {
     abstract fun savedJokeDao(): SavedJokeDao
     abstract fun networkJokeDao(): NetworkJokeDao

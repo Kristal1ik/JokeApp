@@ -4,6 +4,7 @@ import com.kristallik.jokeapp.data.model.NetworkJoke
 import com.kristallik.jokeapp.data.model.SavedJoke
 import com.kristallik.jokeapp.data.source.local.JokeDatabase
 import com.kristallik.jokeapp.domain.model.Joke
+import com.kristallik.jokeapp.domain.model.Source
 
 interface JokeRepository {
     suspend fun getAllSavedJokes(): List<Joke>
@@ -15,7 +16,7 @@ interface JokeRepository {
 class JokeRepositoryImpl(private val database: JokeDatabase) : JokeRepository {
     override suspend fun getAllSavedJokes(): List<Joke> {
         return database.savedJokeDao().getAllJokesSaved().map {
-            Joke(it.id, it.category, it.setup, it.delivery, it.source)
+            Joke(it.id, it.category, it.setup, it.delivery, Source.TYPE_MANUAL)
         }
     }
 

@@ -49,7 +49,6 @@ class MainPresenter(
                     joke.category,
                     joke.setup,
                     joke.delivery,
-                    Source.TYPE_NETWORK,
                     System.currentTimeMillis()
                 )
                 generator.jokes.add(
@@ -58,7 +57,7 @@ class MainPresenter(
                         networkJoke.category,
                         networkJoke.setup,
                         networkJoke.delivery,
-                        networkJoke.source
+                        Source.TYPE_NETWORK
                     )
                 )
                 addNetworkJokeUseCase.execute(networkJoke)
@@ -80,28 +79,29 @@ class MainPresenter(
             val currentTime = System.currentTimeMillis()
             val validTimeDuration = 24 * 60 * 60 * 1000
 
-            withContext(Dispatchers.Main) {
-                val cachedNetworkJokes = withContext(Dispatchers.IO) {
-                    getNetworkJokesUseCase.execute()
-                }
+            withContext(Dispatchers.IO) {
+                val cachedNetworkJokes = getNetworkJokesUseCase.execute()
 
                 if (cachedNetworkJokes.isNotEmpty()) {
                     if (currentTime - cachedNetworkJokes[0].lastUpdated <= validTimeDuration) {
                         generator.jokes.addAll(cachedNetworkJokes.map {
-                            Joke(it.id, it.category, it.setup, it.delivery, it.source)
+                            Joke(it.id, it.category, it.setup, it.delivery, Source.TYPE_NETWORK)
                         })
-                        view.showToast("Loaded cached jokes due to network failure.")
+                        withContext(Dispatchers.Main) {
+                            view.showToast("Loaded cached jokes due to network failure.")
+                            view.showJokes(generator.jokes)
+                        }
                         currentPage++
-                        view.showJokes(generator.jokes)
                     }
                 } else {
-                    view.showToast("No saved jokes available! Please check your internet connection and try again.")
+                    withContext(Dispatchers.Main) {
+                        view.showToast("No saved jokes available! Please check your internet connection and try again.")
+                    }
                 }
             }
         }
         isCashedLoaded = true
     }
-
 
     fun onActionButtonClicked() {
         view.addJoke()
