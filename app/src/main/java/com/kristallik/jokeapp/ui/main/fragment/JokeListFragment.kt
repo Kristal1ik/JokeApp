@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.lifecycleScope
@@ -17,7 +18,7 @@ import com.kristallik.jokeapp.recycler.adapters.JokeListAdapter
 import com.kristallik.jokeapp.ui.add_joke.fragment.AddJokeFragment
 import com.kristallik.jokeapp.ui.add_joke.fragment.AddJokeFragment.Companion.BUNDLE_KEY
 import com.kristallik.jokeapp.ui.add_joke.fragment.AddJokeFragment.Companion.REQUEST_KEY
-import com.kristallik.jokeapp.ui.joke_details.JokeDetailsFragment
+import com.kristallik.jokeapp.ui.joke_details.fragment.JokeDetailsFragment
 import com.kristallik.jokeapp.ui.main.MainPresenter
 import com.kristallik.jokeapp.ui.main.MainView
 import kotlinx.coroutines.launch
@@ -69,7 +70,7 @@ class JokeListFragment : Fragment(), MainView {
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            presenter.loadJokes()
+            presenter.loadJokes(requireContext())
         }
 
         binding.recyclerview.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -79,7 +80,7 @@ class JokeListFragment : Fragment(), MainView {
                 if (layoutManager.findLastCompletelyVisibleItemPosition() == adapter.itemCount - 1) {
                     viewLifecycleOwner.lifecycleScope.launch {
                         binding.progressBar.visibility = View.VISIBLE
-                        presenter.loadMoreJokes()
+                        presenter.loadMoreJokes(requireContext())
                         binding.progressBar.visibility = View.INVISIBLE
                     }
                 }
@@ -113,7 +114,7 @@ class JokeListFragment : Fragment(), MainView {
         }
     }
 
-    override suspend fun showJokes(jokes: ArrayList<Joke>) {
+    override suspend fun showJokes(jokes: List<Joke>) {
         binding.progressBar.visibility = View.INVISIBLE
         binding.errorText.text = ""
         adapter.submitList(jokes.toList())
@@ -130,6 +131,10 @@ class JokeListFragment : Fragment(), MainView {
             .replace(R.id.fragment_container, addJokeFragment)
             .addToBackStack(null)
             .commit()
+    }
+
+    override fun showToast(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 
 
