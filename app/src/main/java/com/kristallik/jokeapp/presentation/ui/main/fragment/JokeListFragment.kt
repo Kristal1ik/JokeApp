@@ -19,9 +19,10 @@ import com.kristallik.jokeapp.databinding.FragmentJokeListBinding
 import com.kristallik.jokeapp.domain.usecase.AddNetworkJokeUseCase
 import com.kristallik.jokeapp.domain.usecase.GetJokesUseCase
 import com.kristallik.jokeapp.domain.usecase.GetNetworkJokesUseCase
+import com.kristallik.jokeapp.presentation.mapper.JokeMapper
 import com.kristallik.jokeapp.presentation.recycler.adapters.JokeListAdapter
-import com.kristallik.jokeapp.presentation.ui.add_joke.fragment.AddJokeFragment
-import com.kristallik.jokeapp.presentation.ui.joke_details.fragment.JokeDetailsFragment
+import com.kristallik.jokeapp.presentation.ui.addJoke.fragment.AddJokeFragment
+import com.kristallik.jokeapp.presentation.ui.jokeDetails.fragment.JokeDetailsFragment
 import com.kristallik.jokeapp.presentation.ui.main.MainPresenter
 import com.kristallik.jokeapp.presentation.ui.main.MainView
 import kotlinx.coroutines.launch
@@ -55,7 +56,8 @@ class JokeListFragment : Fragment(), MainView {
         _binding = FragmentJokeListBinding.inflate(inflater, container, false)
 
         val database = JokeDatabase.getDatabase(requireContext())
-        val jokeRepository = JokeRepositoryImpl(database)
+        val jokeMapper = JokeMapper()
+        val jokeRepository = JokeRepositoryImpl(database, jokeMapper)
 
         val getJokesUseCase = GetJokesUseCase(jokeRepository)
         val getNetworkJokesUseCase = GetNetworkJokesUseCase(jokeRepository)
