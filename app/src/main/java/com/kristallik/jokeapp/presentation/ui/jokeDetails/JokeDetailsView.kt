@@ -1,4 +1,4 @@
-package com.kristallik.jokeapp.presentation.ui.joke_details
+package com.kristallik.jokeapp.presentation.ui.jokeDetails
 
 import com.kristallik.jokeapp.domain.model.Joke
 

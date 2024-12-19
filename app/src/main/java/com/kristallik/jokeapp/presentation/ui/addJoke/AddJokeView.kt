@@ -1,4 +1,4 @@
-package com.kristallik.jokeapp.presentation.ui.add_joke
+package com.kristallik.jokeapp.presentation.ui.addJoke
 
 interface AddJokeView {
     fun showCategories(categories: List<String>)

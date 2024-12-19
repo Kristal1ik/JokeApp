@@ -1,4 +1,4 @@
-package com.kristallik.jokeapp.presentation.ui.add_joke
+package com.kristallik.jokeapp.presentation.ui.addJoke
 
 import android.content.Context
 import com.kristallik.jokeapp.data.model.SavedJoke

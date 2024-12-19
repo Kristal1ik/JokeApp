@@ -1,4 +1,4 @@
-package com.kristallik.jokeapp.presentation.ui.add_joke.fragment
+package com.kristallik.jokeapp.presentation.ui.addJoke.fragment
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -15,8 +15,8 @@ import com.kristallik.jokeapp.domain.model.Joke
 import com.kristallik.jokeapp.data.generator.JokeGenerator.jokes
 import com.kristallik.jokeapp.domain.model.Source
 import com.kristallik.jokeapp.databinding.FragmentAddJokeBinding
-import com.kristallik.jokeapp.presentation.ui.add_joke.AddJokePresenter
-import com.kristallik.jokeapp.presentation.ui.add_joke.AddJokeView
+import com.kristallik.jokeapp.presentation.ui.addJoke.AddJokePresenter
+import com.kristallik.jokeapp.presentation.ui.addJoke.AddJokeView
 
 
 class AddJokeFragment : Fragment(), AddJokeView {
