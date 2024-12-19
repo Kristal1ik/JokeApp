@@ -8,7 +8,7 @@ import com.kristallik.jokeapp.domain.model.Source
 object JokeGenerator {
     val isLocalLoaded: Boolean
         get() = jokes.size != 0
-    var isCashedLoaded: Boolean = false
+    var isCachedLoaded: Boolean = false
     var jokes = ArrayList<Joke>()
     private val questions = listOf(
         "What does Santa suffer from if he gets stuck in a chimney?",

@@ -3,7 +3,7 @@ package com.kristallik.jokeapp.presentation.ui.main
 import android.content.Context
 import com.kristallik.jokeapp.domain.model.Joke
 import com.kristallik.jokeapp.data.generator.JokeGenerator
-import com.kristallik.jokeapp.data.generator.JokeGenerator.isCashedLoaded
+import com.kristallik.jokeapp.data.generator.JokeGenerator.isCachedLoaded
 import com.kristallik.jokeapp.data.model.NetworkJoke
 import com.kristallik.jokeapp.domain.model.Source
 import com.kristallik.jokeapp.data.source.remote.RetrofitInstance
@@ -70,12 +70,13 @@ class MainPresenter(
                 view.showJokes(generator.jokes)
             }
         } catch (e: Exception) {
-            loadCashedJokes(context)
+            loadCachedJokes(context)
         }
     }
 
-    private suspend fun loadCashedJokes(context: Context) {
-        if (!isCashedLoaded) {
+
+    private suspend fun loadCachedJokes(context: Context) {
+        if (!isCachedLoaded) {
             val currentTime = System.currentTimeMillis()
             val validTimeDuration = 24 * 60 * 60 * 1000
 
@@ -100,7 +101,7 @@ class MainPresenter(
                 }
             }
         }
-        isCashedLoaded = true
+        isCachedLoaded = true
     }
 
     fun onActionButtonClicked() {

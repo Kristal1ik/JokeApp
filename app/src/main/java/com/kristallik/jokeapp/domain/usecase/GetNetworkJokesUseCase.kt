@@ -5,10 +5,6 @@ import com.kristallik.jokeapp.data.repository.JokeRepository
 
 class GetNetworkJokesUseCase(private val jokeRepository: JokeRepository) {
     suspend fun execute(): List<NetworkJoke> {
-        return try {
-            jokeRepository.getAllNetworkJokes()
-        } catch (e: Exception) {
-            throw e
-        }
+        return jokeRepository.getAllNetworkJokes()
     }
 }
