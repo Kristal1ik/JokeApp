@@ -1,7 +1,10 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    id("kotlin-kapt")
     id("com.google.devtools.ksp") version "1.9.0-1.0.12"
+
+
 }
 
 android {
@@ -59,6 +62,11 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
-    implementation(libs.dagger)
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.android.compiler)
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.9.20")
 
+}
+kapt {
+    correctErrorTypes = true
 }

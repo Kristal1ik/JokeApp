@@ -10,6 +10,6 @@ interface JokeApiService {
         @Query("blacklistFlags") blacklistFlags: String = "nsfw,religious,political,racist,sexist,explicit",
         @Query("type") type: String = "twopart",
         @Query("amount") amount: Int = 10,
-        @Query("page") page: Int? = null // Добавьте параметр страницы
+        @Query("page") page: Int? = null
     ): JokeListResponse
 }

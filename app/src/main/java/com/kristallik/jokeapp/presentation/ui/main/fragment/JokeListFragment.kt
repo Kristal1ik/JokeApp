@@ -13,8 +13,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.kristallik.jokeapp.R
 import com.kristallik.jokeapp.domain.model.Joke
 import com.kristallik.jokeapp.data.generator.JokeGenerator.jokes
+import com.kristallik.jokeapp.data.repository.JokeRepository
 import com.kristallik.jokeapp.data.repository.JokeRepositoryImpl
 import com.kristallik.jokeapp.data.source.local.JokeDatabase
+import com.kristallik.jokeapp.data.source.remote.JokeApiService
 import com.kristallik.jokeapp.databinding.FragmentJokeListBinding
 import com.kristallik.jokeapp.domain.usecase.AddNetworkJokeUseCase
 import com.kristallik.jokeapp.domain.usecase.GetJokesUseCase
@@ -24,12 +26,22 @@ import com.kristallik.jokeapp.presentation.ui.add_joke.fragment.AddJokeFragment
 import com.kristallik.jokeapp.presentation.ui.joke_details.fragment.JokeDetailsFragment
 import com.kristallik.jokeapp.presentation.ui.main.MainPresenter
 import com.kristallik.jokeapp.presentation.ui.main.MainView
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class JokeListFragment : Fragment(), MainView {
 
     private var _binding: FragmentJokeListBinding? = null
     private val binding get() = _binding!!
+
+    @Inject
+    lateinit var jokeApiService: JokeApiService
+    @Inject
+    lateinit var database: JokeDatabase
+    @Inject
+    lateinit var jokeRepository: JokeRepository
     private lateinit var presenter: MainPresenter
 
     private val adapter = JokeListAdapter { position ->
@@ -53,9 +65,12 @@ class JokeListFragment : Fragment(), MainView {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentJokeListBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
-        val database = JokeDatabase.getDatabase(requireContext())
-        val jokeRepository = JokeRepositoryImpl(database)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
 
         val getJokesUseCase = GetJokesUseCase(jokeRepository)
         val getNetworkJokesUseCase = GetNetworkJokesUseCase(jokeRepository)
@@ -67,13 +82,6 @@ class JokeListFragment : Fragment(), MainView {
             getNetworkJokesUseCase = getNetworkJokesUseCase,
             addNetworkJokeUseCase = addNetworkJokeUseCase
         )
-
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
         createRecyclerViewList()
 
         setFragmentResultListener(AddJokeFragment.REQUEST_KEY) { _, bundle ->
