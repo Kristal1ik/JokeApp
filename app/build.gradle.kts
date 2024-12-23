@@ -1,15 +1,16 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    id("com.google.devtools.ksp") version "1.9.20-1.0.14"
     id("kotlin-kapt")
-    id("com.google.devtools.ksp") version "1.9.0-1.0.12"
-
-
 }
 
+kapt {
+    correctErrorTypes = true
+}
 android {
     namespace = "com.kristallik.jokeapp"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.kristallik.jokeapp"
@@ -62,11 +63,13 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
-    implementation(libs.hilt.android)
-    kapt(libs.hilt.android.compiler)
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.9.20")
 
-}
-kapt {
-    correctErrorTypes = true
+    implementation("androidx.hilt:hilt-navigation-fragment:1.0.0")
+    implementation("com.google.dagger:hilt-android:2.43.2")
+    ksp("com.google.dagger:hilt-compiler:2.43.2")
+    implementation("androidx.hilt:hilt-work:1.0.0")
+    ksp("androidx.hilt:hilt-compiler:1.0.0")
+
+    implementation("androidx.work:work-runtime-ktx:2.7.1")
+
 }

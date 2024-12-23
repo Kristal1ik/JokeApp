@@ -14,7 +14,7 @@
         android:theme="@style/Theme.JokeApp"
         tools:targetApi="31">
         <activity
-            android:name=".presentation.ui.main.MainActivity"
+            android:name=".JokeApp"
             android:exported="true"
             tools:ignore="Instantiatable">
             <intent-filter>
