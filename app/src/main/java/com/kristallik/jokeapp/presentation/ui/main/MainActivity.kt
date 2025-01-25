@@ -7,12 +7,11 @@ import com.kristallik.jokeapp.R
 import com.kristallik.jokeapp.databinding.ActivityMainBinding
 import com.kristallik.jokeapp.presentation.ui.main.fragment.JokeListFragment
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
+import dagger.hilt.android.HiltAndroidApp
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-    @Inject private lateinit var binding: ActivityMainBinding
-
+    private lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)

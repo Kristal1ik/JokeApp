@@ -5,6 +5,7 @@ import com.kristallik.jokeapp.presentation.ui.main.MainActivity
 import dagger.BindsInstance
 import dagger.Component
 
+@Component
 interface AppComponent {
     fun inject(activity: MainActivity)
     @Component.Factory
