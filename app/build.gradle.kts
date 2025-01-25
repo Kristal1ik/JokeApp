@@ -1,13 +1,15 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
-    id("com.google.devtools.ksp") version "1.9.20-1.0.14"
+    id("com.google.devtools.ksp") version "1.9.24-1.0.20"
+//    id("com.google.dagger.hilt.android") version "2.51.1"
     id("kotlin-kapt")
+    alias(libs.plugins.hilt)
 }
-
 kapt {
     correctErrorTypes = true
 }
+
 android {
     namespace = "com.kristallik.jokeapp"
     compileSdk = 35
@@ -62,14 +64,33 @@ dependencies {
     implementation(libs.converter.gson)
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
-    ksp(libs.androidx.room.compiler)
+    kapt(libs.androidx.room.compiler)
 
-    implementation("androidx.hilt:hilt-navigation-fragment:1.0.0")
-    implementation("com.google.dagger:hilt-android:2.43.2")
-    ksp("com.google.dagger:hilt-compiler:2.43.2")
-    implementation("androidx.hilt:hilt-work:1.0.0")
-    ksp("androidx.hilt:hilt-compiler:1.0.0")
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
+    implementation(libs.hilt.navigation.compose)
+
+//    implementation(libs.hilt.android)
 
     implementation("androidx.work:work-runtime-ktx:2.7.1")
 
+//    implementation("androidx.hilt:hilt-navigation-fragment:1.0.0")
+//    implementation("com.google.dagger:hilt-android:2.43.2")
+//
+//    implementation("androidx.hilt:hilt-work:1.0.0")
+//    ksp("androidx.hilt:hilt-compiler:1.0.0")
+//
+//    implementation("androidx.work:work-runtime-ktx:2.7.1")
+//    implementation("com.google.dagger:dagger:2.51.1")
+//
+//    implementation("com.google.dagger:dagger-android:2.51.1")
+//    implementation("com.google.dagger:hilt-android:2.51.1")
+//
+//    ksp("com.google.dagger:hilt-compiler:2.51.1")
+//    ksp("com.google.dagger:dagger-compiler:2.51.1")
+//
+//    ksp("com.google.dagger:dagger-android-processor:2.51.1")
+//
+//    implementation("com.google.dagger:dagger:2.51.1")
+//    ksp("com.google.dagger:dagger-compiler:2.51.1")
 }
