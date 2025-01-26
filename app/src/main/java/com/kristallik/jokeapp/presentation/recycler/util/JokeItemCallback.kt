@@ -1,7 +1,7 @@
-package com.kristallik.jokeapp.recycler.util
+package com.kristallik.jokeapp.presentation.recycler.util
 
 import androidx.recyclerview.widget.DiffUtil
-import com.kristallik.jokeapp.data.Joke
+import com.kristallik.jokeapp.domain.model.Joke
 
 class JokeItemCallback : DiffUtil.ItemCallback<Joke>() {
     override fun areItemsTheSame(oldItem: Joke, newItem: Joke): Boolean {

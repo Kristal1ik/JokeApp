@@ -1,4 +1,4 @@
-package com.kristallik.jokeapp.ui.joke_details
+package com.kristallik.jokeapp.presentation.ui.jokeDetails.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,8 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.kristallik.jokeapp.data.Joke
+import com.kristallik.jokeapp.domain.model.Joke
 import com.kristallik.jokeapp.databinding.FragmentJokeDetailsBinding
+import com.kristallik.jokeapp.presentation.ui.jokeDetails.JokeDetailsPresenter
+import com.kristallik.jokeapp.presentation.ui.jokeDetails.JokeDetailsView
 
 class JokeDetailsFragment : Fragment(), JokeDetailsView {
     private var _binding: FragmentJokeDetailsBinding? = null

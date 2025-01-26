@@ -1,8 +1,8 @@
-package com.kristallik.jokeapp.ui.joke_details
+package com.kristallik.jokeapp.presentation.ui.jokeDetails
 
-import com.kristallik.jokeapp.data.Joke
-import com.kristallik.jokeapp.data.JokeGenerator
-import com.kristallik.jokeapp.ui.joke_details.JokeDetailsView.Companion.VALUE_IF_ERROR
+import com.kristallik.jokeapp.domain.model.Joke
+import com.kristallik.jokeapp.data.generator.JokeGenerator
+import com.kristallik.jokeapp.presentation.ui.jokeDetails.JokeDetailsView.Companion.VALUE_IF_ERROR
 
 // Должен знать о view
 class JokeDetailsPresenter(private val view: JokeDetailsView) {

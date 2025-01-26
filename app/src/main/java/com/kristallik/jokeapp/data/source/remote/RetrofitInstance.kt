@@ -1,4 +1,4 @@
-package com.kristallik.jokeapp.network
+package com.kristallik.jokeapp.data.source.remote
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

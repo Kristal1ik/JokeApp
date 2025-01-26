@@ -1,8 +1,8 @@
-package com.kristallik.jokeapp.recycler
+package com.kristallik.jokeapp.presentation.recycler.viewholder
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import com.kristallik.jokeapp.data.Joke
+import com.kristallik.jokeapp.domain.model.Joke
 import com.kristallik.jokeapp.databinding.JokeItemBinding
 import com.kristallik.jokeapp.databinding.JokeItemNetBinding
 

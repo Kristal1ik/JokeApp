@@ -1,14 +1,14 @@
-package com.kristallik.jokeapp.recycler.adapters
+package com.kristallik.jokeapp.presentation.recycler.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
-import com.kristallik.jokeapp.data.Joke
-import com.kristallik.jokeapp.data.Source
+import com.kristallik.jokeapp.domain.model.Joke
+import com.kristallik.jokeapp.domain.model.Source
 import com.kristallik.jokeapp.databinding.JokeItemBinding
 import com.kristallik.jokeapp.databinding.JokeItemNetBinding
-import com.kristallik.jokeapp.recycler.JokeViewHolder
-import com.kristallik.jokeapp.recycler.util.JokeItemCallback
+import com.kristallik.jokeapp.presentation.recycler.viewholder.JokeViewHolder
+import com.kristallik.jokeapp.presentation.recycler.util.JokeItemCallback
 
 class JokeListAdapter(private val clickListener: (Int) -> Unit) :
     ListAdapter<Joke, JokeViewHolder>(JokeItemCallback()) {

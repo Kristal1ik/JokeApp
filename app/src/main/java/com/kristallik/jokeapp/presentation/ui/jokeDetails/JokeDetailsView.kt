@@ -1,6 +1,6 @@
-package com.kristallik.jokeapp.ui.joke_details
+package com.kristallik.jokeapp.presentation.ui.jokeDetails
 
-import com.kristallik.jokeapp.data.Joke
+import com.kristallik.jokeapp.domain.model.Joke
 
 interface JokeDetailsView {
     companion object {

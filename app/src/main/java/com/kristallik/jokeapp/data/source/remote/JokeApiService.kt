@@ -1,6 +1,6 @@
-package com.kristallik.jokeapp.network
+package com.kristallik.jokeapp.data.source.remote
 
-import com.kristallik.jokeapp.data.JokeListResponse
+import com.kristallik.jokeapp.data.model.JokeListResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 
