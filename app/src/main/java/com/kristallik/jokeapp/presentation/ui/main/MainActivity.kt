@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.commit
 import com.kristallik.jokeapp.R
 import com.kristallik.jokeapp.databinding.ActivityMainBinding
-import com.kristallik.jokeapp.presentation.ui.main.fragment.JokeListFragment
+import com.kristallik.jokeapp.ui.main.fragment.JokeListFragment
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding

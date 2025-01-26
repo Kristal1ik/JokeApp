@@ -1,11 +1,10 @@
 package com.kristallik.jokeapp.presentation.ui.main
 
 import android.content.Context
-import com.kristallik.jokeapp.domain.model.Joke
-import com.kristallik.jokeapp.data.generator.JokeGenerator
-import com.kristallik.jokeapp.data.generator.JokeGenerator.isCachedLoaded
+import com.kristallik.jokeapp.data.Joke
+import com.kristallik.jokeapp.data.JokeGenerator
+import com.kristallik.jokeapp.data.Source
 import com.kristallik.jokeapp.data.model.NetworkJoke
-import com.kristallik.jokeapp.domain.model.Source
 import com.kristallik.jokeapp.data.source.remote.RetrofitInstance
 import com.kristallik.jokeapp.domain.usecase.GetJokesUseCase
 import com.kristallik.jokeapp.domain.usecase.AddNetworkJokeUseCase
