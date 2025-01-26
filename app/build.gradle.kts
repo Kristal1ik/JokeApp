@@ -1,12 +1,15 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
-    id("com.google.devtools.ksp") version "1.9.0-1.0.12" // Убедитесь, что версия актуальна
+    id("kotlin-kapt")
+    id("com.google.devtools.ksp") version "1.9.24-1.0.20"
 }
-
+kapt {
+    correctErrorTypes = true
+}
 android {
     namespace = "com.kristallik.jokeapp"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.kristallik.jokeapp"
@@ -56,8 +59,11 @@ dependencies {
     implementation(libs.androidx.fragment.ktx)
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
+
+//    Room
     implementation(libs.androidx.room.runtime)
+    kapt(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
-    ksp(libs.androidx.room.compiler)
+
 
 }

@@ -1,14 +1,11 @@
-package com.kristallik.jokeapp.data.generator
-
-import com.kristallik.jokeapp.domain.model.Joke
-import com.kristallik.jokeapp.domain.model.Source
+package com.kristallik.jokeapp.data
 
 
 // object, чтобы не создавался при каждом вызове новый экземпляр
 object JokeGenerator {
     val isLocalLoaded: Boolean
         get() = jokes.size != 0
-    var isCachedLoaded: Boolean = false
+    var isNetworkLoaded = false
     var jokes = ArrayList<Joke>()
     private val questions = listOf(
         "What does Santa suffer from if he gets stuck in a chimney?",

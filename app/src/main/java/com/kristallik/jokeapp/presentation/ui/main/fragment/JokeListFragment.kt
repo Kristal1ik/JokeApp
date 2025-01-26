@@ -1,4 +1,4 @@
-package com.kristallik.jokeapp.presentation.ui.main.fragment
+package com.kristallik.jokeapp.ui.main.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,21 +11,18 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.kristallik.jokeapp.R
-import com.kristallik.jokeapp.domain.model.Joke
-import com.kristallik.jokeapp.data.generator.JokeGenerator.jokes
-import com.kristallik.jokeapp.data.repository.JokeRepositoryImpl
-import com.kristallik.jokeapp.data.source.local.JokeDatabase
+import com.kristallik.jokeapp.data.Joke
+import com.kristallik.jokeapp.data.JokeGenerator.jokes
 import com.kristallik.jokeapp.databinding.FragmentJokeListBinding
-import com.kristallik.jokeapp.domain.usecase.AddNetworkJokeUseCase
-import com.kristallik.jokeapp.domain.usecase.GetJokesUseCase
-import com.kristallik.jokeapp.domain.usecase.GetNetworkJokesUseCase
-import com.kristallik.jokeapp.presentation.mapper.JokeMapper
-import com.kristallik.jokeapp.presentation.recycler.adapters.JokeListAdapter
-import com.kristallik.jokeapp.presentation.ui.addJoke.fragment.AddJokeFragment
-import com.kristallik.jokeapp.presentation.ui.jokeDetails.fragment.JokeDetailsFragment
-import com.kristallik.jokeapp.presentation.ui.main.MainPresenter
-import com.kristallik.jokeapp.presentation.ui.main.MainView
+import com.kristallik.jokeapp.recycler.adapters.JokeListAdapter
+import com.kristallik.jokeapp.ui.add_joke.fragment.AddJokeFragment
+import com.kristallik.jokeapp.ui.add_joke.fragment.AddJokeFragment.Companion.BUNDLE_KEY
+import com.kristallik.jokeapp.ui.add_joke.fragment.AddJokeFragment.Companion.REQUEST_KEY
+import com.kristallik.jokeapp.ui.joke_details.JokeDetailsFragment
+import com.kristallik.jokeapp.ui.main.MainPresenter
+import com.kristallik.jokeapp.ui.main.MainView
 import kotlinx.coroutines.launch
+
 
 class JokeListFragment : Fragment(), MainView {
 
@@ -34,6 +31,7 @@ class JokeListFragment : Fragment(), MainView {
     private lateinit var presenter: MainPresenter
 
     private val adapter = JokeListAdapter { position ->
+        currentPosition = position
         val jokeDetailsFragment = JokeDetailsFragment.newInstance(position)
         parentFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, jokeDetailsFragment)
@@ -42,44 +40,27 @@ class JokeListFragment : Fragment(), MainView {
     }
 
     private var currentPosition: Int = 0
+    private var currentJokesList: ArrayList<Joke> = ArrayList()
 
     companion object {
         const val CONST_CURRENT_POSITION = "CURRENT_POSITION"
         const val JOKES = "JOKES"
     }
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentJokeListBinding.inflate(inflater, container, false)
-
-        val database = JokeDatabase.getDatabase(requireContext())
-        val jokeMapper = JokeMapper()
-        val jokeRepository = JokeRepositoryImpl(database, jokeMapper)
-
-        val getJokesUseCase = GetJokesUseCase(jokeRepository)
-        val getNetworkJokesUseCase = GetNetworkJokesUseCase(jokeRepository)
-        val addNetworkJokeUseCase = AddNetworkJokeUseCase(jokeRepository)
-
-        presenter = MainPresenter(
-            view = this,
-            getJokesUseCase = getJokesUseCase,
-            getNetworkJokesUseCase = getNetworkJokesUseCase,
-            addNetworkJokeUseCase = addNetworkJokeUseCase
-        )
-
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        presenter = MainPresenter(this)
         createRecyclerViewList()
-
-        setFragmentResultListener(AddJokeFragment.REQUEST_KEY) { _, bundle ->
-            val newJoke = bundle.getParcelable<Joke>(AddJokeFragment.BUNDLE_KEY)
+        setFragmentResultListener(REQUEST_KEY) { _, bundle ->
+            val newJoke = bundle.getParcelable<Joke>(BUNDLE_KEY)
             newJoke?.let {
                 jokes.add(it)
                 adapter.submitList(jokes.toList())
@@ -104,13 +85,12 @@ class JokeListFragment : Fragment(), MainView {
                 }
             }
         })
-
         // Восстановление данных
         savedInstanceState?.let {
             currentPosition = it.getInt(CONST_CURRENT_POSITION, 0)
-            adapter.submitList(jokes.toList())
+            currentJokesList = it.getParcelableArrayList<Joke>(JOKES) ?: ArrayList()
+            adapter.submitList(currentJokesList)
         }
-
         binding.recyclerview.scrollToPosition(currentPosition)
 
         binding.addActionButton.setOnClickListener {
@@ -133,14 +113,14 @@ class JokeListFragment : Fragment(), MainView {
         }
     }
 
-    override suspend fun showJokes(jokes: List<Joke>) {
+    override suspend fun showJokes(jokes: ArrayList<Joke>) {
         binding.progressBar.visibility = View.INVISIBLE
+        binding.errorText.text = ""
         adapter.submitList(jokes.toList())
     }
 
     override fun showError(errorMessage: String) {
-        binding.errorText.text = errorMessage
-        binding.progressBar.visibility = View.INVISIBLE
+        Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
     }
 
     override fun addJoke() {
@@ -151,9 +131,6 @@ class JokeListFragment : Fragment(), MainView {
             .commit()
     }
 
-    override fun showToast(message: String) {
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
-    }
 
     override fun onResume() {
         super.onResume()
