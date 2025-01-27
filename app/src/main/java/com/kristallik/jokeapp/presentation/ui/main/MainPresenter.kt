@@ -1,6 +1,5 @@
 package com.kristallik.jokeapp.presentation.ui.main
 
-import android.content.Context
 import com.kristallik.jokeapp.domain.model.Joke
 import com.kristallik.jokeapp.data.generator.JokeGenerator
 import com.kristallik.jokeapp.data.generator.JokeGenerator.isCachedLoaded
@@ -14,7 +13,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class MainPresenter(
-    private val view: MainView, private val getJokesUseCase: GetJokesUseCase,
+    private val view: MainView,
+    private val getJokesUseCase: GetJokesUseCase,
     private val getNetworkJokesUseCase: GetNetworkJokesUseCase,
     private val addNetworkJokeUseCase: AddNetworkJokeUseCase
 ) {
@@ -23,7 +23,7 @@ class MainPresenter(
     private val jokesPerPage = 10
 
 
-    suspend fun loadJokes(context: Context) {
+    suspend fun loadJokes() {
         if (!generator.isLocalLoaded) {
             generator.generateJokesData()
             val savedJokes = withContext(Dispatchers.IO) {
@@ -31,13 +31,13 @@ class MainPresenter(
             }
             generator.jokes.addAll(savedJokes)
             currentPage = 0
-            loadMoreJokes(context)
+            loadMoreJokes()
         } else {
             view.showJokes(generator.jokes)
         }
     }
 
-    suspend fun loadMoreJokes(context: Context) {
+    suspend fun loadMoreJokes() {
         try {
             val response = withContext(Dispatchers.IO) {
                 RetrofitInstance.api.getJokes(amount = jokesPerPage, page = currentPage)
@@ -70,12 +70,12 @@ class MainPresenter(
                 view.showJokes(generator.jokes)
             }
         } catch (e: Exception) {
-            loadCachedJokes(context)
+            loadCachedJokes()
         }
     }
 
 
-    private suspend fun loadCachedJokes(context: Context) {
+    private suspend fun loadCachedJokes() {
         if (!isCachedLoaded) {
             val currentTime = System.currentTimeMillis()
             val validTimeDuration = 24 * 60 * 60 * 1000
@@ -100,8 +100,9 @@ class MainPresenter(
                     }
                 }
             }
+            isCachedLoaded = true
+
         }
-        isCachedLoaded = true
     }
 
     fun onActionButtonClicked() {
