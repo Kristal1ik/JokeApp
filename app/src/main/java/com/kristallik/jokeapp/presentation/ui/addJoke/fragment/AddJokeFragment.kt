@@ -10,13 +10,19 @@ import android.widget.AutoCompleteTextView
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
+import androidx.lifecycle.lifecycleScope
 import com.kristallik.jokeapp.R
 import com.kristallik.jokeapp.domain.model.Joke
 import com.kristallik.jokeapp.data.generator.JokeGenerator.jokes
+import com.kristallik.jokeapp.data.repository.JokeRepositoryImpl
+import com.kristallik.jokeapp.data.source.local.JokeDatabase
 import com.kristallik.jokeapp.domain.model.Source
 import com.kristallik.jokeapp.databinding.FragmentAddJokeBinding
+import com.kristallik.jokeapp.domain.usecase.AddJokeUseCase
+import com.kristallik.jokeapp.presentation.mapper.JokeMapper
 import com.kristallik.jokeapp.presentation.ui.addJoke.AddJokePresenter
 import com.kristallik.jokeapp.presentation.ui.addJoke.AddJokeView
+import kotlinx.coroutines.launch
 
 
 class AddJokeFragment : Fragment(), AddJokeView {
@@ -37,18 +43,27 @@ class AddJokeFragment : Fragment(), AddJokeView {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAddJokeBinding.inflate(inflater, container, false)
+
+        val database = JokeDatabase.getDatabase(requireContext())
+        val jokeMapper = JokeMapper()
+        val jokeRepository = JokeRepositoryImpl(database, jokeMapper)
+
+        val addJokeUseCase = AddJokeUseCase(jokeRepository)
+        presenter = AddJokePresenter(this, addJokeUseCase)
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        presenter = AddJokePresenter(this)
         presenter.loadCategories()
         binding.saveButton.setOnClickListener {
             category = (binding.menu.editText as? AutoCompleteTextView)?.text.toString()
             question = binding.question.text.toString()
             answer = binding.answer.text.toString()
-            presenter.onSaveButtonClicked(category, question, answer, requireContext())
+            viewLifecycleOwner.lifecycleScope.launch {
+                presenter.onSaveButtonClicked(category, question, answer)
+            }
         }
 
     }

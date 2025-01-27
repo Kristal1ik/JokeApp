@@ -88,7 +88,7 @@ class JokeListFragment : Fragment(), MainView {
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            presenter.loadJokes(requireContext())
+            presenter.loadJokes()
         }
 
         binding.recyclerview.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -98,7 +98,7 @@ class JokeListFragment : Fragment(), MainView {
                 if (layoutManager.findLastCompletelyVisibleItemPosition() == adapter.itemCount - 1) {
                     viewLifecycleOwner.lifecycleScope.launch {
                         binding.progressBar.visibility = View.VISIBLE
-                        presenter.loadMoreJokes(requireContext())
+                        presenter.loadMoreJokes()
                         binding.progressBar.visibility = View.INVISIBLE
                     }
                 }
